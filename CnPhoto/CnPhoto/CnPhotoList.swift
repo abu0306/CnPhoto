@@ -57,6 +57,7 @@ class CnPhotoList: UIView {
         mycollectionView.delegate = self
         mycollectionView.dataSource = self
         mycollectionView.alwaysBounceVertical = true
+        
         addSubview(mycollectionView)
         
         //单元格注册
@@ -83,25 +84,13 @@ extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        print("\(indexPath)")
-        
         let cell = collectionView.cellForItem(at: indexPath) as? CnPhotoListCell
         
-        
-//        let _ = cell?.convert((cell?.myImageView.frame)!, to: UIApplication.shared.keyWindow)
-        
         let v  = CnBrowsePictures()
-        
-        CnRequestManager.browsePictures(fetchResult?[indexPath.row]) { (img) in
-            
-            
-
-        
-        }
-        
         v.imageV.image = cell?.myImageView.image
         addSubview(v)
-        
+        v.fetchResult = fetchResult
+
     }
 }
 
@@ -119,7 +108,6 @@ class CnPhotoListCell: UICollectionViewCell {
         myImageView.frame = self.bounds
         myImageView.contentMode = .scaleAspectFill
         addSubview(myImageView)
-        backgroundColor = UIColor.yellow
         myImageView.layer.masksToBounds = true
     }
     
@@ -133,7 +121,6 @@ class CnPhotoListCell: UICollectionViewCell {
         guard let aIndexPath = aIndexPath  else { return }
         
         CnRequestManager.getListImage(fetchResult[aIndexPath.row]) {[weak self] (img) in
-            print(img.size)
             self?.myImageView.image = img
             //                        self?.myImageView.image = self?.thumbnailWithImageWithoutScale(img, CGSize(width: photoListImgW, height: photoListImgW))
         }

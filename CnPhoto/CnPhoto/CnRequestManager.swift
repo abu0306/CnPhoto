@@ -42,25 +42,29 @@ class CnRequestManager: NSObject {
             let manager = PHImageManager.default()
             let RequestOptions = PHImageRequestOptions()
             RequestOptions.isSynchronous = false
-            RequestOptions.resizeMode = .fast
-            RequestOptions.deliveryMode = .fastFormat
+            RequestOptions.resizeMode = .exact
+            RequestOptions.deliveryMode = .highQualityFormat
             guard let asset = asset else { return }
-            manager.requestImage(for: asset, targetSize: CGSize.zero, contentMode: .aspectFill, options: RequestOptions) { (img, _) in
+            
+            let scacle = UIScreen.main.scale
+            let width = scacle * cnScreenW
+            let oriImageSize = CGSize(width: width, height: width * size.height / size.width)
+            manager.requestImage(for: asset, targetSize: oriImageSize, contentMode: .aspectFill, options: RequestOptions) { (img, _) in
                 guard let img = img else{ return }
                 completeHandler(img)
             }
         }
     }
     
-   //获取原图尺寸比例
-   private class func oriImage(_ asset:PHAsset?,completeHandler:@escaping (_ size:CGSize)->()) {
+    //获取原图尺寸比例
+    private class func oriImage(_ asset:PHAsset?,completeHandler:@escaping (_ size:CGSize)->()) {
         let manager = PHImageManager.default()
         let RequestOptions = PHImageRequestOptions()
         RequestOptions.isSynchronous = false
         RequestOptions.resizeMode = .fast
         RequestOptions.deliveryMode = .fastFormat
         guard let asset = asset else { return }
-        manager.requestImage(for: asset, targetSize: CGSize(width: photoListImgW * UIScreen.main.scale, height: photoListImgW  * UIScreen.main.scale), contentMode: .aspectFill, options: RequestOptions) { (img, _) in
+        manager.requestImage(for: asset, targetSize: CGSize(width: photoListImgW, height: photoListImgW), contentMode: .aspectFill, options: RequestOptions) { (img, _) in
             guard let img = img else{ return }
             completeHandler(img.size)
         }
@@ -83,9 +87,7 @@ extension NSObject{
         }else if size.width > size.height{
             
             
-            
         }
-        
     }
     
 }
