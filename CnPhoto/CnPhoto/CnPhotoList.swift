@@ -79,38 +79,67 @@ extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
         cell?.aIndexPath = indexPath
         cell?.fetchResult = fetchResult
         cell?.reloadData()
+        
         return cell!
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let cell = collectionView.cellForItem(at: indexPath) as? CnPhotoListCell
+//        guard let cell = collectionView.cellForItem(at: indexPath) as? CnPhotoListCell else {return}
+//        guard let cellImg = cell.myImage else { return }
+//        let r = collectionView.convert(cell.frame, to: self)
         
-        let v  = CnBrowsePictures()
-        v.imageV.image = cell?.myImageView.image
-        addSubview(v)
-        v.fetchResult = fetchResult
-
+        let vc  = CnBrowsePicture()
+        vc.fetchResult = fetchResult
+        self.cnViewController()?.navigationController?.pushViewController(vc, animated: true)
+        
+        // 查看大图
+//        seeBigImageView(cellImg, r, v)
+    }
+    
+    func seeBigImageView(_ img : UIImage ,_ original : CGRect,_ showView : UIView) {
+        
+        let backGroundView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.height))
+        backGroundView.backgroundColor = UIColor.black
+        backGroundView.alpha = 0
+        
+        let imageView = UIImageView(frame: original)
+        imageView.image = img
+        imageView.tag = ToViewLargerImgTAG
+        backGroundView.addSubview(imageView)
+        UIApplication.shared.keyWindow?.addSubview(backGroundView)
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            let y, width, height : CGFloat?
+            y = (UIScreen.main.bounds.size.height - img.size.height * UIScreen.main.bounds.size.width / img.size.width) * 0.5
+            width = UIScreen.main.bounds.size.width
+            height = img.size.height * UIScreen.main.bounds.size.width / img.size.width
+            imageView.frame = CGRect(x: 0, y: y!, width: width!, height: height!)
+            backGroundView.alpha = 1
+        }) { (finish) in
+            showView.alpha = 1
+            backGroundView.removeFromSuperview()
+        }
     }
 }
 
 class CnPhotoListCell: UICollectionViewCell {
     
-    
     var aIndexPath : IndexPath?
     var fetchResult : PHFetchResult<PHAsset>?
     
-    lazy var myImageView = UIImageView()
+    var myImage : UIImage?
+    
+    fileprivate lazy var myImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         myImageView.frame = self.bounds
         myImageView.contentMode = .scaleAspectFill
-        addSubview(myImageView)
-        myImageView.layer.masksToBounds = true
+        contentView.addSubview(myImageView)
+        myImageView.clipsToBounds = true
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -121,8 +150,8 @@ class CnPhotoListCell: UICollectionViewCell {
         guard let aIndexPath = aIndexPath  else { return }
         
         CnRequestManager.getListImage(fetchResult[aIndexPath.row]) {[weak self] (img) in
+            self?.myImage = img
             self?.myImageView.image = img
-            //                        self?.myImageView.image = self?.thumbnailWithImageWithoutScale(img, CGSize(width: photoListImgW, height: photoListImgW))
         }
     }
 }
@@ -152,5 +181,10 @@ extension CnPhotoListCell {
         return resultImage!
         
     }
-    
 }
+
+
+
+
+
+

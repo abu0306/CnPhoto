@@ -43,7 +43,7 @@ class CnRequestManager: NSObject {
             let RequestOptions = PHImageRequestOptions()
             RequestOptions.isSynchronous = false
             RequestOptions.resizeMode = .exact
-            RequestOptions.deliveryMode = .highQualityFormat
+            RequestOptions.deliveryMode = .opportunistic
             guard let asset = asset else { return }
             
             let scacle = UIScreen.main.scale

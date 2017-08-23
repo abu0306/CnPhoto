@@ -29,9 +29,9 @@ class ViewController: UIViewController {
 
     func btnAction() {
         
-//        let vc = CnPhotoCollection()
-//        let nav = UINavigationController(rootViewController: vc)
-//        present(nav, animated: true, completion: nil)
+        let vc = CnPhotoCollection()
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true, completion: nil)
     }
 
 }

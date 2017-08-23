@@ -26,4 +26,6 @@ let photoListSapace = CGFloat(3)
 /// 相册图片宽
 let photoListImgW = (cnScreenW - (photoListColumn - 1) * photoListSapace)/photoListColumn
 
-		
+
+/// 查看大图tag值()
+let ToViewLargerImgTAG = -1000000

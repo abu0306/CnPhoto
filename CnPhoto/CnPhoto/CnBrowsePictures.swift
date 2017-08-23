@@ -12,89 +12,96 @@
 
 import UIKit
 import Photos
-@objc protocol CnPhotoProtocol:NSObjectProtocol{
-    //双击回调
-    @objc optional func handleDoubleTap(_ point:CGPoint)
-}
+//@objc protocol CnPhotoProtocol:NSObjectProtocol{
+//    //双击回调
+//    @objc optional func handleDoubleTap(_ point:CGPoint)
+//}
 
-private let cellID = "CnBrowsePicturesCell"
-
-class CnBrowsePictures: UIView {
-    
-    /// 图片对象集
-    var fetchResult : PHFetchResult<PHAsset>?{
-        didSet{
-            mycollectionView.reloadData()
-        }
-    }
-    
-    lazy var mycollectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: cnScreenW + 10, height: cnScreenH)
-        layout.scrollDirection = .horizontal
-        layout.minimumLineSpacing = 0;
-        layout.minimumInteritemSpacing = 0;
-        let cv = UICollectionView(frame: CGRect.init(x: 0, y: 0, width: cnScreenW + 10, height: cnScreenH), collectionViewLayout: layout)
-        cv.isPagingEnabled = true
-        return cv
-    }()
-    
-    lazy var imageV = UIImageView()
-    
-    private override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.frame = UIScreen.main.bounds
-        self.backgroundColor = UIColor.black
-        
-        mycollectionView.delegate = self
-        mycollectionView.dataSource = self
-        addSubview(mycollectionView)
-        
-        mycollectionView.register(CnBrowsePicturesCell.classForCoder(), forCellWithReuseIdentifier: cellID)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension CnBrowsePictures:UICollectionViewDelegate,UICollectionViewDataSource{
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let count = fetchResult?.count else {  return 0 }
-        return count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnBrowsePicturesCell
-        cell?.aindexPath = indexPath
-        cell?.fetchResult = fetchResult
-        cell?.reloadUI()
-        return cell!
-
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-        for v in cell.contentView.subviews {
-            if let scrollView = v as? CnBrowseScrollView {
-                scrollView.isDouble = false
-                scrollView.setZoomScale(1, animated: false)
-                break
-            }
-        }
-    }
-    
-}
+//private let cellID = "CnBrowsePicturesCell"
+//
+//class CnBrowsePictures: UIView {
+//    
+//    /// 图片对象集
+//    var fetchResult : PHFetchResult<PHAsset>?{
+//        didSet{
+//            mycollectionView.reloadData()
+//        }
+//    }
+//    
+//    lazy var mycollectionView: UICollectionView = {
+//        let layout = UICollectionViewFlowLayout()
+//        layout.itemSize = CGSize(width: cnScreenW + 10, height: cnScreenH)
+//        layout.scrollDirection = .horizontal
+//        layout.minimumLineSpacing = 0;
+//        layout.minimumInteritemSpacing = 0;
+//        let cv = UICollectionView(frame: CGRect.init(x: 0, y: 0, width: cnScreenW + 10, height: cnScreenH), collectionViewLayout: layout)
+//        cv.isPagingEnabled = true
+//        return cv
+//    }()
+//    
+//    
+//    private override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        self.frame = UIScreen.main.bounds
+//        self.backgroundColor = UIColor.black
+//        
+//        mycollectionView.delegate = self
+//        mycollectionView.dataSource = self
+//        addSubview(mycollectionView)
+//        
+//        mycollectionView.register(CnBrowsePicturesCell.classForCoder(), forCellWithReuseIdentifier: cellID)
+//    }
+//    
+//    required init?(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//}
+//
+//extension CnBrowsePictures:UICollectionViewDelegate,UICollectionViewDataSource{
+//    
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        guard let count = fetchResult?.count else {  return 0 }
+//        return count
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnBrowsePicturesCell
+//        
+//        cell?.aindexPath = indexPath
+//        cell?.fetchResult = fetchResult
+//        cell?.reloadUI()
+//        
+//        return cell!
+//        
+//    }
+//    
+//    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        
+//        for v in cell.contentView.subviews {
+//            if let scrollView = v as? CnBrowseScrollView {
+//                scrollView.isDouble = false
+//                scrollView.setZoomScale(1, animated: false)
+//                break
+//            }
+//        }
+//    }
+//    
+//}
 
 class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPhotoProtocol {
     
     var isDouble = false
     
+    
+    /// 浏览图
     var browseImage : UIImage?{
         didSet{
+            guard let strongBrowseImage = browseImage else { return }
             imageV.image = browseImage
+            
+            imageV.center = self.center
+            imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width)
+            
         }
     }
     
@@ -106,16 +113,17 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPhotoProtocol {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        backgroundColor = UIColor.clear
+
         imageV.delegate = self
-        imageV.frame = self.bounds
         addSubview(imageV)
         
-        self.minimumZoomScale = 0.5
+        self.minimumZoomScale = 1.0
         self.maximumZoomScale = 3.0
         self.showsVerticalScrollIndicator = false
         self.showsHorizontalScrollIndicator = false
         delegate = self
-        backgroundColor = UIColor.lightGray
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -177,10 +185,13 @@ class CnBrowsePicturesCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.backgroundColor = UIColor.clear
+        
         myscrollView = CnBrowseScrollView(frame: CGRect(x: 0, y: 0, width: frame.size.width - 10, height: frame.size.height))
         guard let myscrollView = myscrollView else { return  }
         myscrollView.contentSize = myscrollView.bounds.size
         contentView.addSubview(myscrollView)
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -207,8 +218,12 @@ class CnBrowseImageView: UIImageView {
         switch touch.tapCount {
         case 0:
             break
+        case 1:
+            print("敲击一下")
+            break
         case 2:
-            //两只手指
+            //两下
+            print("敲击两下")
             handleDoubleTap(touch)
             break
         default:
@@ -224,4 +239,11 @@ class CnBrowseImageView: UIImageView {
             fatalError("*******没有实现双击协议*******")
         }
     }
+    
+    func gesture(_ recognizer:UIGestureRecognizer) {
+        
+        recognizer.location(in: self)
+        
+    }
+    
 }

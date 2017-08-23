@@ -19,9 +19,9 @@ class CnPhotoCollection: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        getPhotoAlbumPermissions()
-        
         title = "相册"
+        
+        getPhotoAlbumPermissions()
         
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
         btn.setTitle("返回", for: .normal)
@@ -30,12 +30,11 @@ class CnPhotoCollection: UIViewController {
         
         let navBarItem = UIBarButtonItem(customView: btn)
         navigationItem.leftBarButtonItem = navBarItem
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
     }
     
     func btnAction() {
@@ -74,9 +73,6 @@ extension CnPhotoCollection{
         }
     }
 }
-
-
-
 
 
 //MARK: - 没有或者禁用图片展示View

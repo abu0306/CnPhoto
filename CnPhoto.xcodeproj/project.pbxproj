@@ -20,6 +20,7 @@
 		E865526D1F3849BF00F9554B /* CnCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865526C1F3849BF00F9554B /* CnCommon.swift */; };
 		E865526F1F3856DB00F9554B /* CnPhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865526E1F3856DB00F9554B /* CnPhotoList.swift */; };
 		E86552711F3865B000F9554B /* CnRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552701F3865B000F9554B /* CnRequestManager.swift */; };
+		E8CD2C0E1F4D8AF800990BF0 /* CnBrowsePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD2C0D1F4D8AF800990BF0 /* CnBrowsePicture.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		E865526C1F3849BF00F9554B /* CnCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnCommon.swift; sourceTree = "<group>"; };
 		E865526E1F3856DB00F9554B /* CnPhotoList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoList.swift; sourceTree = "<group>"; };
 		E86552701F3865B000F9554B /* CnRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnRequestManager.swift; sourceTree = "<group>"; };
+		E8CD2C0D1F4D8AF800990BF0 /* CnBrowsePicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnBrowsePicture.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				E86552681F38428900F9554B /* CnPhotoCollection.swift */,
 				E865526E1F3856DB00F9554B /* CnPhotoList.swift */,
 				E8454BCA1F3AF6120074D631 /* CnBrowsePictures.swift */,
+				E8CD2C0D1F4D8AF800990BF0 /* CnBrowsePicture.swift */,
 				E865526C1F3849BF00F9554B /* CnCommon.swift */,
 				E86552701F3865B000F9554B /* CnRequestManager.swift */,
 				E8454BC81F3AF47D0074D631 /* CnExtension.swift */,
@@ -288,6 +291,7 @@
 			files = (
 				E8454BC91F3AF47D0074D631 /* CnExtension.swift in Sources */,
 				E865523C1F38427F00F9554B /* ViewController.swift in Sources */,
+				E8CD2C0E1F4D8AF800990BF0 /* CnBrowsePicture.swift in Sources */,
 				E865523A1F38427F00F9554B /* AppDelegate.swift in Sources */,
 				E8454BCB1F3AF6120074D631 /* CnBrowsePictures.swift in Sources */,
 				E86552711F3865B000F9554B /* CnRequestManager.swift in Sources */,
