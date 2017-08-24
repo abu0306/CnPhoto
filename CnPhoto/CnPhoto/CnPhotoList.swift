@@ -21,80 +21,90 @@ class CnPhotoList: UIView {
         return c
     }()
     
+    // 是否为多选 ,默认单选
+    fileprivate lazy var IsPictureDoublePicker =  {
+        return UserDefaults.standard.bool(forKey: isDoublePickerKey)
+    }()
+    
     /// 图片对象
     var assetCollection : PHAssetCollection?
     
     /// 图片对象集
     fileprivate var fetchResult : PHFetchResult<PHAsset>?
     
+    deinit {
+        //  移除观察者
+        mycollectionView.removeObserver(self, forKeyPath: "contentSize")
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func layoutSubviews() {
         getFetchResult(assetCollection)
     }
     
     
+    /// 是否滚动到底部
+    fileprivate var isScrollBottom = false
+    
+    
     /// 获取图片集合
     ///
     /// - Parameter asset: 图片对象
-    func getFetchResult(_ asset:PHAssetCollection?) {
+    fileprivate  func getFetchResult(_ asset:PHAssetCollection?) {
         guard let asset = asset else { return }
         fetchResult = PHAsset.fetchAssets(in: asset, options: nil)
         mycollectionView.reloadData()
     }
     
-    func setupUI(){
+    fileprivate func setupUI(){
         mycollectionView.frame = UIScreen.main.bounds
         mycollectionView.delegate = self
         mycollectionView.dataSource = self
         mycollectionView.alwaysBounceVertical = true
-        
         addSubview(mycollectionView)
         
         //单元格注册
         mycollectionView.register(CnPhotoListCell.classForCoder(), forCellWithReuseIdentifier: cellID)
+        
+        mycollectionView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions.new, context: nil)
     }
-    
 }
 
+// MARK: - UICollectionViewDelegate,UICollectionViewDataSource
 extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    internal func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let count = fetchResult?.count else { return 0 }
         return count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    internal func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnPhotoListCell
         cell?.aIndexPath = indexPath
         cell?.fetchResult = fetchResult
         cell?.reloadData()
-        
         return cell!
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-//        guard let cell = collectionView.cellForItem(at: indexPath) as? CnPhotoListCell else {return}
-//        guard let cellImg = cell.myImage else { return }
-//        let r = collectionView.convert(cell.frame, to: self)
+    internal func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let vc  = CnBrowsePicture()
-        vc.fetchResult = fetchResult
+        guard let fr = fetchResult else {
+            fatalError("*********没有获取到图像集*********")
+        }
+        
+        let result = IsPictureDoublePicker ? [PHAsset]() : [fr[indexPath.row]]
+        vc.fetchResult = result
         self.cnViewController()?.navigationController?.pushViewController(vc, animated: true)
         
-        // 查看大图
-//        seeBigImageView(cellImg, r, v)
     }
     
     func seeBigImageView(_ img : UIImage ,_ original : CGRect,_ showView : UIView) {
@@ -123,7 +133,24 @@ extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
     }
 }
 
-class CnPhotoListCell: UICollectionViewCell {
+
+// MARK: - KVC
+extension CnPhotoList{
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "contentSize" {
+            let offset = mycollectionView.contentSize.height - mycollectionView.bounds.size.height
+            if !isScrollBottom  {
+                if offset > 0 {
+                    isScrollBottom = true
+                    mycollectionView.setContentOffset( CGPoint(x: 0, y: offset), animated: false)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - NewClass
+fileprivate class CnPhotoListCell: UICollectionViewCell {
     
     var aIndexPath : IndexPath?
     var fetchResult : PHFetchResult<PHAsset>?
@@ -156,7 +183,7 @@ class CnPhotoListCell: UICollectionViewCell {
     }
 }
 
-extension CnPhotoListCell {
+fileprivate extension CnPhotoListCell {
     
     func thumbnailWithImageWithoutScale(_ image:UIImage,_ size:CGSize) -> UIImage {
         
@@ -182,6 +209,7 @@ extension CnPhotoListCell {
         
     }
 }
+
 
 
 

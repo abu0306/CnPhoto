@@ -14,32 +14,53 @@ enum authorNum:Int {
     case denied
 }
 
+extension UIViewController:CnPhotoProtocol{
+    open func PhotoAlbum(_ isDouble : Bool = false) {
+        let vc = CnPhotoCollection()
+        vc.delegate = self
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true, completion: nil)
+    }
+}
+
 class CnPhotoCollection: UIViewController {
+    
+    /// 是否是单选 Default : true
+    var isDoublePicker = true{
+        didSet{
+            UserDefaults.standard.set(isDoublePicker, forKey: isDoublePickerKey)
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
+    weak var delegate : CnPhotoProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.white
-        title = "相册"
         
+        setupUI()
         getPhotoAlbumPermissions()
-        
-        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
-        btn.setTitle("返回", for: .normal)
-        btn.setTitleColor(UIColor.black, for: .normal)
-        btn.addTarget(self, action: #selector(btnAction), for: .touchUpInside)
-        
-        let navBarItem = UIBarButtonItem(customView: btn)
-        navigationItem.leftBarButtonItem = navBarItem
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
     }
     
-    func btnAction() {
-        
+    @objc fileprivate func btnAction() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    fileprivate func setupUI(){
+        view.backgroundColor = UIColor.white
+        title = "相册"
+        
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
+        btn.setTitle("取消", for: .normal)
+        btn.setTitleColor(UIColor.black, for: .normal)
+        btn.addTarget(self, action: #selector(btnAction), for: .touchUpInside)
+        let navBarItem = UIBarButtonItem(customView: btn)
+        navigationItem.rightBarButtonItem = navBarItem
     }
 }
 
@@ -69,11 +90,9 @@ extension CnPhotoCollection{
             let v = CnPhotoList(frame: UIScreen.main.bounds)
             v.assetCollection = assetCollection
             view.addSubview(v)
-            
         }
     }
 }
-
 
 //MARK: - 没有或者禁用图片展示View
 class CnUserDisable: UIView {

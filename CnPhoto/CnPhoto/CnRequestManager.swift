@@ -38,7 +38,7 @@ class CnRequestManager: NSObject {
     ///   - completeHandler: 获取图片回调
     class func browsePictures(_ asset:PHAsset?,completeHandler:@escaping (_ image:UIImage)->()) {
         
-        CnRequestManager.oriImage(asset) { (size) in
+        CnRequestManager.oriImageScale(asset) { (size) in
             let manager = PHImageManager.default()
             let RequestOptions = PHImageRequestOptions()
             RequestOptions.isSynchronous = false
@@ -51,13 +51,39 @@ class CnRequestManager: NSObject {
             let oriImageSize = CGSize(width: width, height: width * size.height / size.width)
             manager.requestImage(for: asset, targetSize: oriImageSize, contentMode: .aspectFill, options: RequestOptions) { (img, _) in
                 guard let img = img else{ return }
+                print(img.size)
+
                 completeHandler(img)
             }
         }
     }
     
+    //获取原图尺寸
+    class func getOriImg(_ asset:PHAsset?,completeHandler:@escaping (_ img:UIImage)->()) {
+        
+        CnRequestManager.oriImageScale(asset) { (size) in
+            
+            let manager = PHImageManager.default()
+            let RequestOptions = PHImageRequestOptions()
+            RequestOptions.isSynchronous = false
+            RequestOptions.resizeMode = .exact
+            RequestOptions.deliveryMode = .highQualityFormat
+            guard let asset = asset else { return }
+            
+            let scacle = UIScreen.main.scale
+            let width = scacle * cnScreenW
+            
+            manager.requestImage(for: asset, targetSize: CGSize(width: width, height: width * size.height / size.width), contentMode: .aspectFill, options: RequestOptions) { (img, _) in
+                guard let img = img else{ return }
+                print(img.size)
+                completeHandler(img)
+            }
+            
+        }
+    }
+    
     //获取原图尺寸比例
-    private class func oriImage(_ asset:PHAsset?,completeHandler:@escaping (_ size:CGSize)->()) {
+    private class func oriImageScale(_ asset:PHAsset?,completeHandler:@escaping (_ size:CGSize)->()) {
         let manager = PHImageManager.default()
         let RequestOptions = PHImageRequestOptions()
         RequestOptions.isSynchronous = false
@@ -69,6 +95,8 @@ class CnRequestManager: NSObject {
             completeHandler(img.size)
         }
     }
+    
+
 }
 
 extension NSObject{

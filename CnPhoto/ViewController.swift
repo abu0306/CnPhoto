@@ -18,20 +18,18 @@ class ViewController: UIViewController {
         btn.backgroundColor = UIColor.yellow
         btn.addTarget(self, action: #selector(btnAction), for: .touchUpInside)
         view.addSubview(btn)
-        
-
     }
-
+    
+    func completeSinglePicture(_ img: UIImage) {
+        print("回调")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-
+    
     func btnAction() {
-        
-        let vc = CnPhotoCollection()
-        let nav = UINavigationController(rootViewController: vc)
-        present(nav, animated: true, completion: nil)
+        self.PhotoAlbum()
     }
 
 }

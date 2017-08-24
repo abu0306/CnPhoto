@@ -20,14 +20,14 @@ import Photos
 //private let cellID = "CnBrowsePicturesCell"
 //
 //class CnBrowsePictures: UIView {
-//    
+//
 //    /// 图片对象集
 //    var fetchResult : PHFetchResult<PHAsset>?{
 //        didSet{
 //            mycollectionView.reloadData()
 //        }
 //    }
-//    
+//
 //    lazy var mycollectionView: UICollectionView = {
 //        let layout = UICollectionViewFlowLayout()
 //        layout.itemSize = CGSize(width: cnScreenW + 10, height: cnScreenH)
@@ -38,45 +38,45 @@ import Photos
 //        cv.isPagingEnabled = true
 //        return cv
 //    }()
-//    
-//    
+//
+//
 //    private override init(frame: CGRect) {
 //        super.init(frame: frame)
 //        self.frame = UIScreen.main.bounds
 //        self.backgroundColor = UIColor.black
-//        
+//
 //        mycollectionView.delegate = self
 //        mycollectionView.dataSource = self
 //        addSubview(mycollectionView)
-//        
+//
 //        mycollectionView.register(CnBrowsePicturesCell.classForCoder(), forCellWithReuseIdentifier: cellID)
 //    }
-//    
+//
 //    required init?(coder aDecoder: NSCoder) {
 //        fatalError("init(coder:) has not been implemented")
 //    }
 //}
 //
 //extension CnBrowsePictures:UICollectionViewDelegate,UICollectionViewDataSource{
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        guard let count = fetchResult?.count else {  return 0 }
 //        return count
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 //        let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnBrowsePicturesCell
-//        
+//
 //        cell?.aindexPath = indexPath
 //        cell?.fetchResult = fetchResult
 //        cell?.reloadUI()
-//        
+//
 //        return cell!
-//        
+//
 //    }
-//    
+//
 //    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        
+//
 //        for v in cell.contentView.subviews {
 //            if let scrollView = v as? CnBrowseScrollView {
 //                scrollView.isDouble = false
@@ -85,10 +85,10 @@ import Photos
 //            }
 //        }
 //    }
-//    
+//
 //}
 
-class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPhotoProtocol {
+class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     
     var isDouble = false
     
@@ -106,7 +106,8 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPhotoProtocol {
     }
     
     lazy var imageV: CnBrowseImageView = {
-        let v = CnBrowseImageView()
+        let v = CnBrowseImageView(frame: CGRect.zero)
+        
         v.isUserInteractionEnabled = true
         return v
     }()
@@ -115,7 +116,7 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPhotoProtocol {
         super.init(frame: frame)
         
         backgroundColor = UIColor.clear
-
+        
         imageV.delegate = self
         addSubview(imageV)
         
@@ -137,6 +138,13 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPhotoProtocol {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.isScrollEnabled = true
+    }
+
+    
+    /// 单击隐藏
+    internal func handleSingleTap() {
+
+        
     }
     
     //双击缩放
@@ -181,7 +189,7 @@ class CnBrowsePicturesCell: UICollectionViewCell {
     var myscrollView : CnBrowseScrollView?
     
     var aindexPath : IndexPath?
-    var fetchResult : PHFetchResult<PHAsset>?
+    var fetchResult : [PHAsset]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -191,7 +199,7 @@ class CnBrowsePicturesCell: UICollectionViewCell {
         guard let myscrollView = myscrollView else { return  }
         myscrollView.contentSize = myscrollView.bounds.size
         contentView.addSubview(myscrollView)
-
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -209,32 +217,61 @@ class CnBrowsePicturesCell: UICollectionViewCell {
 }
 
 
-class CnBrowseImageView: UIImageView {
+class CnBrowseImageView: UIImageView,UIGestureRecognizerDelegate {
     
-    weak var delegate : CnPhotoProtocol?
+    weak var delegate : CnPrivateProtocol?
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        switch touch.tapCount {
-        case 0:
-            break
-        case 1:
-            print("敲击一下")
-            break
-        case 2:
-            //两下
-            print("敲击两下")
-            handleDoubleTap(touch)
-            break
-        default:
-            break
-        }
-        self.next?.touchesBegan(touches, with: event)
+    private  lazy var singleTap = UITapGestureRecognizer()
+    private  lazy var doubleTap = UITapGestureRecognizer()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        singleTap.numberOfTapsRequired = 1
+        singleTap.addTarget(self, action: #selector(singleTapGestureRecongizer(_:)))
+        addGestureRecognizer(singleTap)
+        
+        doubleTap.numberOfTapsRequired = 2
+        doubleTap.addTarget(self, action: #selector(singleTapGestureRecongizer(_:)))
+        doubleTap.delegate = self
+        addGestureRecognizer(doubleTap)
+        
+        singleTap.require(toFail: doubleTap)
+        
     }
     
-    func handleDoubleTap(_ touch:UITouch) {
-        if (self.delegate?.responds(to: #selector(CnPhotoProtocol.handleDoubleTap(_:)))) ?? false{
-            self.delegate?.handleDoubleTap!(touch.location(in: self))
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    func singleTapGestureRecongizer(_ recognizer:UITapGestureRecognizer) {
+        
+        if recognizer.state == .ended {
+            switch recognizer.numberOfTapsRequired {
+            case 1:
+                handleSingleTap()
+                break
+            case 2:
+                handleDoubleTap(recognizer.location(in: self))
+                break
+            default:
+                break
+            }
+        }
+    }
+    
+    private func handleSingleTap(){
+        if self.delegate?.responds(to: #selector(CnPrivateProtocol.handleSingleTap)) ?? false {
+            self.delegate?.handleSingleTap!()
+        }else{
+            fatalError("*******没有实现单击协议*******")
+        }
+    }
+    
+   private func handleDoubleTap(_ point:CGPoint) {
+        if (self.delegate?.responds(to: #selector(CnPrivateProtocol.handleDoubleTap(_:)))) ?? false{
+            self.delegate?.handleDoubleTap!(point)
         }else{
             fatalError("*******没有实现双击协议*******")
         }

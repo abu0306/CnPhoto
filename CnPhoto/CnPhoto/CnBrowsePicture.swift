@@ -10,15 +10,29 @@ import UIKit
 import Photos
 private let cellID = "CnBrowsePicturesCell"
 
-@objc protocol CnPhotoProtocol:NSObjectProtocol{
+@objc protocol CnPrivateProtocol:NSObjectProtocol{
     //双击回调
     @objc optional func handleDoubleTap(_ point:CGPoint)
+    /// 单击回调
+    @objc optional func handleSingleTap()
+}
+
+@objc protocol CnPhotoProtocol:NSObjectProtocol{
+    
+    /// 单选照片回调
+    ///
+    /// - Parameter img: 回调值
+    @objc optional func completeSinglePicture(_ img : UIImage)
+
 }
 
 class CnBrowsePicture: UIViewController {
     
+    
+    var aindexPath : IndexPath?
+    
     /// 图片对象集
-    var fetchResult : PHFetchResult<PHAsset>?{
+    var fetchResult : [PHAsset]?{
         didSet{
             mycollectionView.reloadData()
         }
@@ -44,6 +58,11 @@ class CnBrowsePicture: UIViewController {
         return cv
     }()
     
+    // 是否为多选 ,默认单选
+    fileprivate lazy var isPictureDoublePicker =  {
+        return UserDefaults.standard.bool(forKey: isDoublePickerKey)
+    }()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,32 +74,50 @@ class CnBrowsePicture: UIViewController {
         mycollectionView.register(CnBrowsePicturesCell.classForCoder(), forCellWithReuseIdentifier: cellID)
         
         
-        let backbtn = UIButton(type: .custom)
-        backbtn.frame = CGRect(x: 0, y: 20, width: 44, height: 60)
-        backbtn.setTitle("返回", for: .normal)
-        backbtn.setTitleColor(UIColor.white, for: .normal)
-        backbtn.addTarget(self, action: #selector(backBtnAction), for: .touchUpInside)
-        navigationView.addSubview(backbtn)
+        if isPictureDoublePicker {
+            //多选未设置
+            print("多选未设置")
+        }else{
+            singlePickerImgViewUI()
+        }
         
-        view.addSubview(navigationView)
 
     }
-    
     
     @objc fileprivate func backBtnAction() {
         navigationController?.popViewController(animated: true)
     }
 
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        if let path = Bundle.main.path(forResource: "Info", ofType: "plist"){
+            if let dict = NSDictionary(contentsOfFile: path){
+                if let value = dict["UIViewControllerBasedStatusBarAppearance"] as? Bool{
+                    if !value {
+                        fatalError("\n****************请在Info.plist文件中设置key : View controller-based status bar appearance value : YES**************\n")
+                    }
+                }
+                else{
+                    fatalError("\n****************请在Info.plist文件中设置key : View controller-based status bar appearance value : YES**************\n")
+                }
+            }
+        }
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        UIApplication.shared.setStatusBarHidden(true, with: .none)
     }
+    
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        UIApplication.shared.setStatusBarHidden(false, with: .none)
+
+
+//        UIApplication.shared.setStatusBarHidden(false, with: .none)
     }
 
 }
@@ -115,5 +152,68 @@ extension CnBrowsePicture:UICollectionViewDelegate,UICollectionViewDataSource{
         }
     }
     
+}
+
+
+// MARK: - singlePicker
+extension CnBrowsePicture{
+    
+    func singlePickerImgViewUI() {
+        
+        let bottomBgView = UIView(frame: CGRect.zero)
+        bottomBgView.backgroundColor = UIColor.clear
+        bottomBgView.frame = CGRect(x: 0, y: view.bounds.size.height - 64, width: cnScreenW, height: 64)
+        view.addSubview(bottomBgView)
+        
+        let maskBgView = UIView(frame: CGRect.zero)
+        maskBgView.alpha = 0.5
+        maskBgView.backgroundColor = UIColor.black
+        maskBgView.frame = CGRect(x: 0, y: 0, width: cnScreenW, height: 64)
+        bottomBgView.addSubview(maskBgView)
+        
+        let cancleBtn = UIButton(type: .custom)
+        cancleBtn.frame = CGRect(x: 0, y: 20, width: 100, height: 44)
+        cancleBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        cancleBtn.setTitle("取消", for: .normal)
+        cancleBtn.setTitleColor(UIColor.white, for: .normal)
+        cancleBtn.addTarget(self, action: #selector(singlePickerAction(_:)), for: .touchUpInside)
+        bottomBgView.addSubview(cancleBtn)
+        cancleBtn.tag = cancleBtnTAG
+        
+        let determineBtn = UIButton(type: .custom)
+        determineBtn.frame = CGRect(x: cnScreenW - 100, y: 20, width: 100, height: 44)
+        determineBtn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        determineBtn.setTitle("完成", for: .normal)
+        determineBtn.setTitleColor(UIColor.white, for: .normal)
+        determineBtn.addTarget(self, action: #selector(singlePickerAction(_:)), for: .touchUpInside)
+        bottomBgView.addSubview(determineBtn)
+        determineBtn.tag = determineBtnTAG
+
+    }
+    
+    @objc private func singlePickerAction(_ sender : UIButton) {
+        
+        switch sender.tag {
+        case cancleBtnTAG:
+            //取消
+            navigationController?.popViewController(animated: true)
+            break
+        case determineBtnTAG:
+            //确定
+          let delegate = (navigationController?.viewControllers.first as? CnPhotoCollection)?.delegate
+          if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSinglePicture(_:)))) ?? false {
+            CnRequestManager.getOriImg(fetchResult?.first, completeHandler: {[weak self] (img) in
+                delegate?.completeSinglePicture!(img)
+                self?.dismiss(animated: true, completion: nil)
+            })
+          }else{
+            fatalError("没有实现_CnPhotoProtocol协议")
+          }
+            break
+        default:
+            break
+        }
+        
+    }
 }
 

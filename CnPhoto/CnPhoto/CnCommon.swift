@@ -29,3 +29,13 @@ let photoListImgW = (cnScreenW - (photoListColumn - 1) * photoListSapace)/photoL
 
 /// 查看大图tag值()
 let ToViewLargerImgTAG = -1000000
+/// 取消btn()
+let cancleBtnTAG = -1000001
+/// 确定btn()
+let determineBtnTAG = -1000002
+
+let isDoublePickerKey = "isDoublePickerKey"
+
+let cnPhotoDelegateKey = "cnPhotoDelegateKey"
+
+
