@@ -6,10 +6,6 @@
 //  Copyright © 2017年 MyLifeIsNotLost. All rights reserved.
 //
 
-
-
-
-
 import UIKit
 import Photos
 //@objc protocol CnPhotoProtocol:NSObjectProtocol{
@@ -92,16 +88,27 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     
     var isDouble = false
     
+    var currentOffSetY : CGFloat = 0
+    
     
     /// 浏览图
     var browseImage : UIImage?{
         didSet{
             guard let strongBrowseImage = browseImage else { return }
+            
+            //／ 原始高值
+            let imgH = cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width
+            /// 差值
+            let diffValue = imgH - cnScreenW
+            if diffValue > 0{
+                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + diffValue)
+                self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
+                
+                imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 + diffValue / 2.0)
+                
+                imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
+            }
             imageV.image = browseImage
-            
-            imageV.center = self.center
-            imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width)
-            
         }
     }
     
@@ -115,7 +122,7 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.clear
+        backgroundColor = UIColor.yellow
         
         imageV.delegate = self
         addSubview(imageV)
@@ -139,11 +146,9 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.isScrollEnabled = true
     }
-
     
     /// 单击隐藏
     internal func handleSingleTap() {
-
         
     }
     
@@ -173,17 +178,54 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
         }
     }
     
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        print(scrollView.contentOffset.y)
+        currentOffSetY = self.contentOffset.y
+        
+    }
+    
     /// 控制缩放是在中心
     ///
     /// - Parameter scrollView: 使得imageView居中
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         let offsetX : CGFloat = (self.bounds.size.width > self.contentSize.width) ? ((self.bounds.size.width - self.contentSize.width) * 0.5) : 0
         let offsetY : CGFloat = (self.bounds.size.height > self.contentSize.height) ? ((self.bounds.size.height - self.contentSize.height) * 0.5) : 0.0
+        
         imageV.center = CGPoint(x: self.contentSize.width * 0.5 + offsetX, y: self.contentSize.height * 0.5 + offsetY)
+        
+        let differenceValue = imageV.frame.size.height - cnScreenW
+        let imgH = imageV.frame.size.height
+        if differenceValue > 0{
+            if imgH > cnScreenH {
+                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
+                
+                self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
+                imageV.center = CGPoint(x: imageV.center.x, y: cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
+                
+                print(self.contentOffset.y)
+                
+            }else{
+                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
+                self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
+                imageV.center = CGPoint(x: imageV.center.x, y: cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
+            }
+        }
+        else{
+            
+            print(imageV.frame.size)
+
+        }
     }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.y)
+    }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        
+    }
+
 }
-
-
 class CnBrowsePicturesCell: UICollectionViewCell {
     
     var myscrollView : CnBrowseScrollView?
@@ -269,7 +311,7 @@ class CnBrowseImageView: UIImageView,UIGestureRecognizerDelegate {
         }
     }
     
-   private func handleDoubleTap(_ point:CGPoint) {
+    private func handleDoubleTap(_ point:CGPoint) {
         if (self.delegate?.responds(to: #selector(CnPrivateProtocol.handleDoubleTap(_:)))) ?? false{
             self.delegate?.handleDoubleTap!(point)
         }else{

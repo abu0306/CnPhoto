@@ -23,7 +23,7 @@ private let cellID = "CnBrowsePicturesCell"
     ///
     /// - Parameter img: 回调值
     @objc optional func completeSinglePicture(_ img : UIImage)
-
+    
 }
 
 class CnBrowsePicture: UIViewController {
@@ -39,10 +39,12 @@ class CnBrowsePicture: UIViewController {
     }
     
     lazy var navigationView: UIView = {
-        let v = UIView(frame: CGRect(x: 0,
-                                                 y: 0,
-                                                 width: cnScreenW,
-                                                 height: 64))
+        let v = UIView(frame: CGRect(
+            x: 0,
+            y: 0,
+            width: cnScreenW,
+            height: 64
+        ))
         v.backgroundColor = UIColor.lightGray
         return v
     }()
@@ -63,7 +65,6 @@ class CnBrowsePicture: UIViewController {
         return UserDefaults.standard.bool(forKey: isDoublePickerKey)
     }()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
@@ -73,7 +74,6 @@ class CnBrowsePicture: UIViewController {
         view.addSubview(mycollectionView)
         mycollectionView.register(CnBrowsePicturesCell.classForCoder(), forCellWithReuseIdentifier: cellID)
         
-        
         if isPictureDoublePicker {
             //多选未设置
             print("多选未设置")
@@ -81,13 +81,20 @@ class CnBrowsePicture: UIViewController {
             singlePickerImgViewUI()
         }
         
+        let v1 = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0, width: cnScreenW, height: 1))
+        v1.backgroundColor = UIColor.green
+        view.addSubview(v1)
+        
+        let v2 = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0 + cnScreenW, width: cnScreenW, height: 1))
+        v2.backgroundColor = UIColor.green
+        view.addSubview(v2)
 
     }
     
     @objc fileprivate func backBtnAction() {
-        navigationController?.popViewController(animated: true)
+        _ = navigationController?.popViewController(animated: true)
     }
-
+    
     override var prefersStatusBarHidden: Bool{
         return true
     }
@@ -110,16 +117,10 @@ class CnBrowsePicture: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-
-
-//        UIApplication.shared.setStatusBarHidden(false, with: .none)
     }
-
 }
 
 
@@ -132,7 +133,7 @@ extension CnBrowsePicture:UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnBrowsePicturesCell
-                
+        
         cell?.aindexPath = indexPath
         cell?.fetchResult = fetchResult
         cell?.reloadUI()
@@ -151,9 +152,7 @@ extension CnBrowsePicture:UICollectionViewDelegate,UICollectionViewDataSource{
             }
         }
     }
-    
 }
-
 
 // MARK: - singlePicker
 extension CnBrowsePicture{
@@ -188,7 +187,7 @@ extension CnBrowsePicture{
         determineBtn.addTarget(self, action: #selector(singlePickerAction(_:)), for: .touchUpInside)
         bottomBgView.addSubview(determineBtn)
         determineBtn.tag = determineBtnTAG
-
+        
     }
     
     @objc private func singlePickerAction(_ sender : UIButton) {
@@ -196,24 +195,48 @@ extension CnBrowsePicture{
         switch sender.tag {
         case cancleBtnTAG:
             //取消
-            navigationController?.popViewController(animated: true)
+            _ = navigationController?.popViewController(animated: true)
             break
         case determineBtnTAG:
             //确定
-          let delegate = (navigationController?.viewControllers.first as? CnPhotoCollection)?.delegate
-          if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSinglePicture(_:)))) ?? false {
-            CnRequestManager.getOriImg(fetchResult?.first, completeHandler: {[weak self] (img) in
+
+            let delegate = (navigationController?.viewControllers.first as? CnPhotoCollection)?.delegate
+            if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSinglePicture(_:)))) ?? false {
+            
+                guard let scrollView = (self.mycollectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? CnBrowsePicturesCell)?.myscrollView else { return }
+                
+//                print(imageV?.image?.size)
+//                print(imageV?.frame)
+//                print(imageV?.superview)
+            
+                guard let clipImage = scrollView.imageV.image else { return }
+            
+                /// scrollview ContentView X Y 偏移量是截图的位置
+                
+               let scaleImage = clipImage.imageCompressWithSimple(scrollView.imageV.frame.size)
+                
+//                delegate?.completeSinglePicture!(scaleImage)
+
+              let img = self.view.clipWithImageRect(CGRect(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y, width: cnScreenW, height: cnScreenW), scaleImage)
                 delegate?.completeSinglePicture!(img)
-                self?.dismiss(animated: true, completion: nil)
-            })
-          }else{
-            fatalError("没有实现_CnPhotoProtocol协议")
-          }
+                
+                self.dismiss(animated: true, completion: nil)
+
+//                CnRequestManager.getOriImg(fetchResult?.first, completeHandler: {[weak self] (img) in
+//                    
+//                    
+//                    
+//                    
+////                    delegate?.completeSinglePicture!(img)
+////                    self?.dismiss(animated: true, completion: nil)
+//                })
+            }else{
+                fatalError("没有实现_CnPhotoProtocol协议")
+            }
             break
         default:
             break
         }
-        
     }
 }
 

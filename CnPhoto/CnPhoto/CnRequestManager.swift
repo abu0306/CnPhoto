@@ -51,8 +51,6 @@ class CnRequestManager: NSObject {
             let oriImageSize = CGSize(width: width, height: width * size.height / size.width)
             manager.requestImage(for: asset, targetSize: oriImageSize, contentMode: .aspectFill, options: RequestOptions) { (img, _) in
                 guard let img = img else{ return }
-                print(img.size)
-
                 completeHandler(img)
             }
         }
@@ -75,7 +73,6 @@ class CnRequestManager: NSObject {
             
             manager.requestImage(for: asset, targetSize: CGSize(width: width, height: width * size.height / size.width), contentMode: .aspectFill, options: RequestOptions) { (img, _) in
                 guard let img = img else{ return }
-                print(img.size)
                 completeHandler(img)
             }
             

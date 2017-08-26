@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let myImageView = UIImageView()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -18,9 +21,14 @@ class ViewController: UIViewController {
         btn.backgroundColor = UIColor.yellow
         btn.addTarget(self, action: #selector(btnAction), for: .touchUpInside)
         view.addSubview(btn)
+        
+        myImageView.frame = CGRect(x: 0, y: 250, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.width)
+        view.addSubview(myImageView)
+        myImageView.contentMode = .scaleAspectFill
     }
     
     func completeSinglePicture(_ img: UIImage) {
+        myImageView.image = img
         print("回调")
     }
     
