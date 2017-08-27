@@ -32,7 +32,7 @@ extension UIImage{
     ///
     /// - Parameter clipRect: 剪切CGRect
     /// - Returns: 剪切后UIImage
-    func clipWithImageRect(_ clipRect :CGRect )->UIImage{
+    open func clipWithImageRect(_ clipRect :CGRect )->UIImage{
         let scale = UIScreen.main.scale
         let sourceImageRef: CGImage = self.cgImage!
         guard let newImg = sourceImageRef.cropping(to: CGRect(x: clipRect.origin.x  * scale , y: clipRect.origin.y * scale , width: clipRect.width * scale, height: clipRect.height * scale)) else { return UIImage()}
@@ -45,7 +45,7 @@ extension UIImage{
     ///
     /// - Parameter scaledToSize: 缩小的大小
     /// - Returns: 缩小后的UIImage
-    func imageCompressWithSimple(_ scaledToSize : CGSize) -> UIImage {
+    open  func imageCompressWithSimple(_ scaledToSize : CGSize) -> UIImage {
         return reSizeImage(reSize: scaledToSize)
     }
     
