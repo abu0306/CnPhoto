@@ -56,9 +56,8 @@ class ViewController: UIViewController {
     func btnAction() {
         
         /// 相册默认导航
-
-        //相册自定义导航
         //self.photoAlbum(false)
+        //相册自定义导航
         self.photoAlbum(false, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
     }
 
