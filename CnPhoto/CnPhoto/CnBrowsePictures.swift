@@ -8,88 +8,12 @@
 
 import UIKit
 import Photos
-//@objc protocol CnPhotoProtocol:NSObjectProtocol{
-//    //双击回调
-//    @objc optional func handleDoubleTap(_ point:CGPoint)
-//}
-
-//private let cellID = "CnBrowsePicturesCell"
-//
-//class CnBrowsePictures: UIView {
-//
-//    /// 图片对象集
-//    var fetchResult : PHFetchResult<PHAsset>?{
-//        didSet{
-//            mycollectionView.reloadData()
-//        }
-//    }
-//
-//    lazy var mycollectionView: UICollectionView = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.itemSize = CGSize(width: cnScreenW + 10, height: cnScreenH)
-//        layout.scrollDirection = .horizontal
-//        layout.minimumLineSpacing = 0;
-//        layout.minimumInteritemSpacing = 0;
-//        let cv = UICollectionView(frame: CGRect.init(x: 0, y: 0, width: cnScreenW + 10, height: cnScreenH), collectionViewLayout: layout)
-//        cv.isPagingEnabled = true
-//        return cv
-//    }()
-//
-//
-//    private override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        self.frame = UIScreen.main.bounds
-//        self.backgroundColor = UIColor.black
-//
-//        mycollectionView.delegate = self
-//        mycollectionView.dataSource = self
-//        addSubview(mycollectionView)
-//
-//        mycollectionView.register(CnBrowsePicturesCell.classForCoder(), forCellWithReuseIdentifier: cellID)
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
-//
-//extension CnBrowsePictures:UICollectionViewDelegate,UICollectionViewDataSource{
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        guard let count = fetchResult?.count else {  return 0 }
-//        return count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell  = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnBrowsePicturesCell
-//
-//        cell?.aindexPath = indexPath
-//        cell?.fetchResult = fetchResult
-//        cell?.reloadUI()
-//
-//        return cell!
-//
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//
-//        for v in cell.contentView.subviews {
-//            if let scrollView = v as? CnBrowseScrollView {
-//                scrollView.isDouble = false
-//                scrollView.setZoomScale(1, animated: false)
-//                break
-//            }
-//        }
-//    }
-//
-//}
 
 class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     
     var isDouble = false
     
     var currentOffSetY : CGFloat = 0
-    
     
     /// 浏览图
     var browseImage : UIImage?{

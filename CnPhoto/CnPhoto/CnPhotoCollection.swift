@@ -126,7 +126,6 @@ class CnUserDisable: UIView {
         }
         
         MSgAlert.text = title
-        
         MSgAlert.sizeToFit()
         MSgAlert.frame = CGRect(x: 0, y: 100, width: UIScreen.main.bounds.width, height: MSgAlert.bounds.height)
     }

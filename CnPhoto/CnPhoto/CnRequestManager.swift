@@ -12,7 +12,6 @@ import Photos
 
 class CnRequestManager: NSObject {
     
-    
     /// 列表图片展示
     ///
     /// - Parameters:
@@ -92,29 +91,6 @@ class CnRequestManager: NSObject {
             completeHandler(img.size)
         }
     }
-    
-
-}
-
-extension NSObject{
-    
-    func size(_ size : CGSize) {
-        
-        if size.width < size.height {
-            let h = size.width * cnScreenH / size.height
-            if h > cnScreenH {
-                //固定高为cnScreenH屏幕高,等比缩小图片
-            } else {
-                //固定宽为屏幕宽,等比缩小
-                
-            }
-            
-        }else if size.width > size.height{
-            
-            
-        }
-    }
-    
 }
 
 
