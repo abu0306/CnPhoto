@@ -179,8 +179,6 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        print(scrollView.contentOffset.y)
-        currentOffSetY = self.contentOffset.y
         
     }
     
@@ -202,7 +200,6 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
                 self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
                 imageV.center = CGPoint(x: imageV.center.x, y: cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
                 
-                print(self.contentOffset.y)
                 
             }else{
                 self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
@@ -218,11 +215,10 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     }
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.y)
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        
+                
     }
 
 }

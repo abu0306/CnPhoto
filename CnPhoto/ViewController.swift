@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         view.addSubview(btn)
         
         myImageView.frame = CGRect(x: 0, y: 250, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.width)
+        myImageView.backgroundColor = UIColor.green
         view.addSubview(myImageView)
         myImageView.contentMode = .scaleAspectFill
     }

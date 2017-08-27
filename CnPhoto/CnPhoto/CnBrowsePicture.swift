@@ -88,7 +88,7 @@ class CnBrowsePicture: UIViewController {
         let v2 = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0 + cnScreenW, width: cnScreenW, height: 1))
         v2.backgroundColor = UIColor.green
         view.addSubview(v2)
-
+        
     }
     
     @objc fileprivate func backBtnAction() {
@@ -122,7 +122,6 @@ class CnBrowsePicture: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 }
-
 
 extension CnBrowsePicture:UICollectionViewDelegate,UICollectionViewDataSource{
     
@@ -199,37 +198,24 @@ extension CnBrowsePicture{
             break
         case determineBtnTAG:
             //确定
-
+            
             let delegate = (navigationController?.viewControllers.first as? CnPhotoCollection)?.delegate
             if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSinglePicture(_:)))) ?? false {
-            
+                
                 guard let scrollView = (self.mycollectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? CnBrowsePicturesCell)?.myscrollView else { return }
                 
-//                print(imageV?.image?.size)
-//                print(imageV?.frame)
-//                print(imageV?.superview)
-            
                 guard let clipImage = scrollView.imageV.image else { return }
-            
-                /// scrollview ContentView X Y 偏移量是截图的位置
                 
-               let scaleImage = clipImage.imageCompressWithSimple(scrollView.imageV.frame.size)
+                //imgView缩放比例
                 
-//                delegate?.completeSinglePicture!(scaleImage)
-
-              let img = self.view.clipWithImageRect(CGRect(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y, width: cnScreenW, height: cnScreenW), scaleImage)
-                delegate?.completeSinglePicture!(img)
+                print(scrollView.imageV.frame)
                 
+                let scaleImage = clipImage.imageCompressWithSimple(CGSize(width: scrollView.imageV.frame.size.width , height: scrollView.imageV.frame.size.height))
+                
+                let imgs = scaleImage.clipWithImageRect(CGRect(x: scrollView.contentOffset.x, y: scrollView.contentOffset.y, width: cnScreenW, height: cnScreenW ))
+                
+                delegate?.completeSinglePicture!(imgs)
                 self.dismiss(animated: true, completion: nil)
-
-//                CnRequestManager.getOriImg(fetchResult?.first, completeHandler: {[weak self] (img) in
-//                    
-//                    
-//                    
-//                    
-////                    delegate?.completeSinglePicture!(img)
-////                    self?.dismiss(animated: true, completion: nil)
-//                })
             }else{
                 fatalError("没有实现_CnPhotoProtocol协议")
             }
