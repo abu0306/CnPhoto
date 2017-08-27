@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E8454BC91F3AF47D0074D631 /* CnExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8454BC81F3AF47D0074D631 /* CnExtension.swift */; };
-		E8454BCB1F3AF6120074D631 /* CnBrowsePictures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8454BCA1F3AF6120074D631 /* CnBrowsePictures.swift */; };
 		E865523A1F38427F00F9554B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552391F38427F00F9554B /* AppDelegate.swift */; };
 		E865523C1F38427F00F9554B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865523B1F38427F00F9554B /* ViewController.swift */; };
 		E865523F1F38427F00F9554B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E865523D1F38427F00F9554B /* Main.storyboard */; };
@@ -16,11 +14,14 @@
 		E86552441F38427F00F9554B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E86552421F38427F00F9554B /* LaunchScreen.storyboard */; };
 		E865524F1F38427F00F9554B /* CnPhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865524E1F38427F00F9554B /* CnPhotoTests.swift */; };
 		E865525A1F38427F00F9554B /* CnPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552591F38427F00F9554B /* CnPhotoUITests.swift */; };
-		E86552691F38428900F9554B /* CnPhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552681F38428900F9554B /* CnPhotoCollection.swift */; };
-		E865526D1F3849BF00F9554B /* CnCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865526C1F3849BF00F9554B /* CnCommon.swift */; };
-		E865526F1F3856DB00F9554B /* CnPhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865526E1F3856DB00F9554B /* CnPhotoList.swift */; };
-		E86552711F3865B000F9554B /* CnRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552701F3865B000F9554B /* CnRequestManager.swift */; };
-		E8CD2C0E1F4D8AF800990BF0 /* CnBrowsePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD2C0D1F4D8AF800990BF0 /* CnBrowsePicture.swift */; };
+		E8799AE31F52C6C40042DA31 /* CnBrowsePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799ADB1F52C6C40042DA31 /* CnBrowsePicture.swift */; };
+		E8799AE41F52C6C40042DA31 /* CnCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799ADC1F52C6C40042DA31 /* CnCommon.swift */; };
+		E8799AE51F52C6C40042DA31 /* CnExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799ADD1F52C6C40042DA31 /* CnExtension.swift */; };
+		E8799AE61F52C6C40042DA31 /* CnPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799ADE1F52C6C40042DA31 /* CnPhoto.swift */; };
+		E8799AE71F52C6C40042DA31 /* CnPhotoCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799ADF1F52C6C40042DA31 /* CnPhotoCollection.swift */; };
+		E8799AE81F52C6C40042DA31 /* CnPhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799AE01F52C6C40042DA31 /* CnPhotoList.swift */; };
+		E8799AE91F52C6C40042DA31 /* CnPhotoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */; };
+		E8799AEA1F52C6C40042DA31 /* CnRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +42,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E8454BC81F3AF47D0074D631 /* CnExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnExtension.swift; sourceTree = "<group>"; };
-		E8454BCA1F3AF6120074D631 /* CnBrowsePictures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnBrowsePictures.swift; sourceTree = "<group>"; };
 		E86552361F38427F00F9554B /* CnPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CnPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86552391F38427F00F9554B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E865523B1F38427F00F9554B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,11 +55,14 @@
 		E86552551F38427F00F9554B /* CnPhotoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CnPhotoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86552591F38427F00F9554B /* CnPhotoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CnPhotoUITests.swift; sourceTree = "<group>"; };
 		E865525B1F38427F00F9554B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E86552681F38428900F9554B /* CnPhotoCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoCollection.swift; sourceTree = "<group>"; };
-		E865526C1F3849BF00F9554B /* CnCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnCommon.swift; sourceTree = "<group>"; };
-		E865526E1F3856DB00F9554B /* CnPhotoList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoList.swift; sourceTree = "<group>"; };
-		E86552701F3865B000F9554B /* CnRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnRequestManager.swift; sourceTree = "<group>"; };
-		E8CD2C0D1F4D8AF800990BF0 /* CnBrowsePicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnBrowsePicture.swift; sourceTree = "<group>"; };
+		E8799ADB1F52C6C40042DA31 /* CnBrowsePicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnBrowsePicture.swift; sourceTree = "<group>"; };
+		E8799ADC1F52C6C40042DA31 /* CnCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnCommon.swift; sourceTree = "<group>"; };
+		E8799ADD1F52C6C40042DA31 /* CnExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnExtension.swift; sourceTree = "<group>"; };
+		E8799ADE1F52C6C40042DA31 /* CnPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhoto.swift; sourceTree = "<group>"; };
+		E8799ADF1F52C6C40042DA31 /* CnPhotoCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoCollection.swift; sourceTree = "<group>"; };
+		E8799AE01F52C6C40042DA31 /* CnPhotoList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoList.swift; sourceTree = "<group>"; };
+		E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoProtocol.swift; sourceTree = "<group>"; };
+		E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnRequestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,9 +113,9 @@
 		E86552381F38427F00F9554B /* CnPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				E8799ADA1F52C6C40042DA31 /* CnPhoto */,
 				E86552391F38427F00F9554B /* AppDelegate.swift */,
 				E865523B1F38427F00F9554B /* ViewController.swift */,
-				E86552671F38428900F9554B /* CnPhoto */,
 				E865523D1F38427F00F9554B /* Main.storyboard */,
 				E86552401F38427F00F9554B /* Assets.xcassets */,
 				E86552421F38427F00F9554B /* LaunchScreen.storyboard */,
@@ -140,16 +142,17 @@
 			path = CnPhotoUITests;
 			sourceTree = "<group>";
 		};
-		E86552671F38428900F9554B /* CnPhoto */ = {
+		E8799ADA1F52C6C40042DA31 /* CnPhoto */ = {
 			isa = PBXGroup;
 			children = (
-				E86552681F38428900F9554B /* CnPhotoCollection.swift */,
-				E865526E1F3856DB00F9554B /* CnPhotoList.swift */,
-				E8454BCA1F3AF6120074D631 /* CnBrowsePictures.swift */,
-				E8CD2C0D1F4D8AF800990BF0 /* CnBrowsePicture.swift */,
-				E865526C1F3849BF00F9554B /* CnCommon.swift */,
-				E86552701F3865B000F9554B /* CnRequestManager.swift */,
-				E8454BC81F3AF47D0074D631 /* CnExtension.swift */,
+				E8799ADE1F52C6C40042DA31 /* CnPhoto.swift */,
+				E8799ADF1F52C6C40042DA31 /* CnPhotoCollection.swift */,
+				E8799ADB1F52C6C40042DA31 /* CnBrowsePicture.swift */,
+				E8799AE01F52C6C40042DA31 /* CnPhotoList.swift */,
+				E8799ADC1F52C6C40042DA31 /* CnCommon.swift */,
+				E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */,
+				E8799ADD1F52C6C40042DA31 /* CnExtension.swift */,
+				E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */,
 			);
 			path = CnPhoto;
 			sourceTree = "<group>";
@@ -289,15 +292,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8454BC91F3AF47D0074D631 /* CnExtension.swift in Sources */,
 				E865523C1F38427F00F9554B /* ViewController.swift in Sources */,
-				E8CD2C0E1F4D8AF800990BF0 /* CnBrowsePicture.swift in Sources */,
+				E8799AE91F52C6C40042DA31 /* CnPhotoProtocol.swift in Sources */,
+				E8799AE51F52C6C40042DA31 /* CnExtension.swift in Sources */,
 				E865523A1F38427F00F9554B /* AppDelegate.swift in Sources */,
-				E8454BCB1F3AF6120074D631 /* CnBrowsePictures.swift in Sources */,
-				E86552711F3865B000F9554B /* CnRequestManager.swift in Sources */,
-				E865526F1F3856DB00F9554B /* CnPhotoList.swift in Sources */,
-				E86552691F38428900F9554B /* CnPhotoCollection.swift in Sources */,
-				E865526D1F3849BF00F9554B /* CnCommon.swift in Sources */,
+				E8799AEA1F52C6C40042DA31 /* CnRequestManager.swift in Sources */,
+				E8799AE81F52C6C40042DA31 /* CnPhotoList.swift in Sources */,
+				E8799AE71F52C6C40042DA31 /* CnPhotoCollection.swift in Sources */,
+				E8799AE31F52C6C40042DA31 /* CnBrowsePicture.swift in Sources */,
+				E8799AE41F52C6C40042DA31 /* CnCommon.swift in Sources */,
+				E8799AE61F52C6C40042DA31 /* CnPhoto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

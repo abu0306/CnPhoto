@@ -28,17 +28,37 @@ class ViewController: UIViewController {
         myImageView.contentMode = .scaleAspectFill
     }
     
+    
+    
+    /// UIImage回调
+    ///
+    /// - Parameter img: _
     func completeSinglePicture(_ img: UIImage) {
         myImageView.image = img
-        print("回调")
     }
+    
+    
+    /// UIImage线程阻塞回调
+    ///
+    /// - Parameters:
+    ///   - img: _
+    ///   - completeHandle: 回调控制
+    func completeSinglePicture(_ img: UIImage, _ completeHandle: () -> ()) {
+        myImageView.image = img
+        completeHandle()
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func btnAction() {
-//        self.photoAlbum(false)
+        
+        /// 相册默认导航
+
+        //相册自定义导航
+        //self.photoAlbum(false)
         self.photoAlbum(false, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
     }
 
