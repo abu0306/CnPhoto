@@ -1,5 +1,5 @@
 ## CnPhoto
-###CnPhoto 基于系统Photo框架开发,适用于iOS8.0以后版本
+##CnPhoto 基于系统Photo框架开发,适用于iOS8.0以后版本
 ---
 ##Installation
 ---
