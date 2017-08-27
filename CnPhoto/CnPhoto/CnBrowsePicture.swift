@@ -68,7 +68,7 @@ class CnBrowsePicture: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
-        view.backgroundColor = UIColor.black
+        view.backgroundColor = UIColor.clear
         mycollectionView.delegate = self
         mycollectionView.dataSource = self
         view.addSubview(mycollectionView)
@@ -81,13 +81,13 @@ class CnBrowsePicture: UIViewController {
             singlePickerImgViewUI()
         }
         
-        let v1 = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0, width: cnScreenW, height: 1))
-        v1.backgroundColor = UIColor.green
-        view.addSubview(v1)
+        let topV = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0, width: cnScreenW, height: 1))
+        topV.backgroundColor = UIColor.white
+        view.addSubview(topV)
         
-        let v2 = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0 + cnScreenW, width: cnScreenW, height: 1))
-        v2.backgroundColor = UIColor.green
-        view.addSubview(v2)
+        let bottomV = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0 + cnScreenW, width: cnScreenW, height: 1))
+        bottomV.backgroundColor = UIColor.white
+        view.addSubview(bottomV)
         
     }
     

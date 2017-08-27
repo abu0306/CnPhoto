@@ -38,7 +38,8 @@ class ViewController: UIViewController {
     }
     
     func btnAction() {
-        self.PhotoAlbum()
+        self.photoAlbum(false)
+//        self.photoAlbum(false, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
     }
 
 }

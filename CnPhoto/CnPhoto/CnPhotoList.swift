@@ -65,6 +65,7 @@ class CnPhotoList: UIView {
     }
     
     fileprivate func setupUI(){
+        mycollectionView.backgroundColor = UIColor.clear
         mycollectionView.frame = UIScreen.main.bounds
         mycollectionView.delegate = self
         mycollectionView.dataSource = self

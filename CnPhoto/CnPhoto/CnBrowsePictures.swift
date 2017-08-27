@@ -46,8 +46,6 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.yellow
-        
         imageV.delegate = self
         addSubview(imageV)
         
@@ -91,7 +89,6 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
         }
         
         if (self.zoomScale != self.minimumZoomScale ) {
-            
             self.setZoomScale(minimumZoomScale, animated: true)
         }else
         {
@@ -103,7 +100,7 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        
+        currentOffSetY = scrollView.contentOffset.y
     }
     
     /// 控制缩放是在中心
@@ -122,8 +119,7 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
                 self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
                 
                 self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
-                imageV.center = CGPoint(x: imageV.center.x, y: cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
-                
+                imageV.center = CGPoint(x: imageV.center.x, y:cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
                 
             }else{
                 self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
@@ -132,9 +128,7 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
             }
         }
         else{
-            
             print(imageV.frame.size)
-
         }
     }
 

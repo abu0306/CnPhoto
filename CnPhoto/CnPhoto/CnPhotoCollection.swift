@@ -14,16 +14,58 @@ enum authorNum:Int {
     case denied
 }
 
-extension UIViewController:CnPhotoProtocol{
-    open func PhotoAlbum(_ isDouble : Bool = false) {
+extension UIViewController:CnPhotoProtocol{    
+    
+    /// 默认但航
+    ///
+    /// - Parameter isDouble: 是否多选
+    func photoAlbum(_ isDouble : Bool) {
+        privatePhotoAlbum(isDouble)
+    }
+    
+    /// 自定义导航
+    ///
+    /// - Parameters:
+    ///   - isDouble: 是否多选
+    ///   - statusBarStyle: 状态栏颜色
+    ///   - navBgColor: 导航颜色
+    ///   - tintColor: 导航字体色
+    ///   - bgColor: 试图背景色
+    open func photoAlbum(_ isDouble : Bool,_ statusBarStyle : UIStatusBarStyle,_ navBgColor : UIColor, tintColor : UIColor,bgColor : UIColor) {
+        privatePhotoAlbum(isDouble, statusBarStyle, navBgColor, tintColor: tintColor, bgColor: bgColor)
+    }
+    
+    private func privatePhotoAlbum(_ isDouble : Bool? = false,_ statusBarStyle : UIStatusBarStyle? = .default,_ navBgColor : UIColor? = UIColor.white , tintColor : UIColor? = UIColor.black,bgColor:UIColor? = UIColor.black) {
+        
         let vc = CnPhotoCollection()
         vc.delegate = self
-        let nav = UINavigationController(rootViewController: vc)
-        present(nav, animated: true, completion: nil)
+        vc.bgColor = bgColor
+        vc.navBgColor = navBgColor
+        vc.tintColor = tintColor
+        if statusBarStyle == UIStatusBarStyle.default{
+            let nav = UINavigationController(rootViewController: vc)
+            present(nav, animated: true, completion: nil)
+            
+        }else{
+            let nav = myNavigationController(rootViewController: vc)
+            present(nav, animated: true, completion: nil)
+        }
     }
 }
 
+class myNavigationController: UINavigationController {
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return UIStatusBarStyle.lightContent
+    }
+}
+
+
 class CnPhotoCollection: UIViewController {
+    
+    var bgColor : UIColor?
+    var navBgColor : UIColor?
+    var tintColor : UIColor?
     
     /// 是否是单选 Default : true
     var isDoublePicker = true{
@@ -35,32 +77,48 @@ class CnPhotoCollection: UIViewController {
     
     weak var delegate : CnPhotoProtocol?
     
+    lazy var navBarView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
         getPhotoAlbumPermissions()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     @objc fileprivate func btnAction() {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
     fileprivate func setupUI(){
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = bgColor
         title = "相册"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : tintColor ?? UIColor.black]
         
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
         btn.setTitle("取消", for: .normal)
-        btn.setTitleColor(UIColor.black, for: .normal)
+        btn.setTitleColor(tintColor, for: .normal)
         btn.addTarget(self, action: #selector(btnAction), for: .touchUpInside)
         let navBarItem = UIBarButtonItem(customView: btn)
         navigationItem.rightBarButtonItem = navBarItem
+        
+        navBarView.frame = CGRect(x: 0, y: 0, width: cnScreenW, height: 64)
+        navBarView.alpha = 0.7
+        navBarView.backgroundColor = navBgColor
+        view.addSubview(navBarView)
     }
 }
 
@@ -81,13 +139,13 @@ extension CnPhotoCollection{
             let assetCollection  = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumUserLibrary, options: nil).lastObject
             if assetCollection == nil
             {
-                let v = CnUserDisable(frame: UIScreen.main.bounds)
+                let v = CnUserDisable(frame: CGRect(x: 0, y: 64, width: cnScreenW, height: cnScreenH - 64))
                 view.addSubview(v)
                 v.type = authorNum.first
                 return
             }
             
-            let v = CnPhotoList(frame: UIScreen.main.bounds)
+            let v = CnPhotoList(frame: CGRect(x: 0, y: 64, width: cnScreenW, height: cnScreenH - 64))
             v.assetCollection = assetCollection
             view.addSubview(v)
         }
