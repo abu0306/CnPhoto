@@ -19,7 +19,7 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
     var browseImage : UIImage?{
         didSet{
             guard let strongBrowseImage = browseImage else { return }
-            
+                        
             //／ 原始高值
             let imgH = cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width
             /// 差值
@@ -31,6 +31,15 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
                 imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 + diffValue / 2.0)
                 
                 imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
+            }else{
+                
+                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH)
+                self.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+                
+                imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 )
+                
+                imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
+                
             }
             imageV.image = browseImage
         }
@@ -167,6 +176,7 @@ class CnBrowsePicturesCell: UICollectionViewCell {
         guard let aindexPath = aindexPath else { return }
         let asset = fetchResult[aindexPath.row]
         CnRequestManager.browsePictures(asset) {[weak self] (image) in
+            
             self?.myscrollView?.browseImage = image
         }
     }
