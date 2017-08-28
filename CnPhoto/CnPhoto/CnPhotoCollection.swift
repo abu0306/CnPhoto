@@ -90,7 +90,7 @@ extension CnPhotoCollection{
         
         if authorStatus == PHAuthorizationStatus.restricted || authorStatus == PHAuthorizationStatus.denied{
             //无权限(用户禁止)
-            let v = CnUserDisable(frame: UIScreen.main.bounds)
+            let v = CnUserDisable(frame: CGRect(x: 0, y: 64, width: cnScreenW, height: cnScreenH - 64))
             view.addSubview(v)
             v.type = authorNum.denied
             
@@ -118,7 +118,6 @@ class CnUserDisable: UIView {
     fileprivate lazy var MSgAlert = UILabel()
     var type : authorNum?
     override func layoutSubviews() {
-        frame = UIScreen.main.bounds
         setupUI()
     }
     
