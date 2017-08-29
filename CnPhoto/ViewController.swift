@@ -76,13 +76,13 @@ class ViewController: UIViewController {
         //self.photoAlbum(false)
         
         //单选相册自定义导航
-        self.photoAlbum(false, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
+//        self.photoAlbum(false, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
         
         /// 单选相册默认导航
         //self.photoAlbum(true)
         
         //多选相册自定义导航
-        self.photoAlbum(true, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
+//        self.photoAlbum(true, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
     }
 
 }
