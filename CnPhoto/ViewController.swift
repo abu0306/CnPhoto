@@ -82,7 +82,7 @@ class ViewController: UIViewController {
         //self.photoAlbum(true)
         
         //多选相册自定义导航
-//        self.photoAlbum(true, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
+        self.photoAlbum(true, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
     }
 
 }

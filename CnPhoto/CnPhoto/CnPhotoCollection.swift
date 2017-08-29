@@ -36,7 +36,6 @@ class CnPhotoCollection: UIViewController {
         }
     }
     
-    
     fileprivate var mylistView : CnPhotoList?
     fileprivate var fetchResult : PHFetchResult<PHAsset>?
     
@@ -51,6 +50,12 @@ class CnPhotoCollection: UIViewController {
         
         getPhotoAlbumPermissions()
         setupUI()
+        
+        let ins = UserDefaults.standard.integer(forKey: cnPhotoCountKey)
+        if ins == 0{
+            UserDefaults.standard.set(9, forKey: cnPhotoCountKey)
+            UserDefaults.standard.synchronize()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

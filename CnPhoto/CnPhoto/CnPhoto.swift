@@ -32,7 +32,6 @@ extension UIViewController:CnPhotoProtocol{
         privatePhotoAlbum(isDouble, statusBarStyle, navBgColor, tintColor: tintColor, bgColor: bgColor)
     }
     
-    
     private func privatePhotoAlbum(_ isDouble : Bool? = true,_ statusBarStyle : UIStatusBarStyle? = .default,_ navBgColor : UIColor? = UIColor.white , tintColor : UIColor? = UIColor.black,bgColor:UIColor? = UIColor.black) {
         
         let vc = CnPhotoCollection()
@@ -49,6 +48,22 @@ extension UIViewController:CnPhotoProtocol{
             let nav = myNavigationController(rootViewController: vc)
             present(nav, animated: true, completion: nil)
         }
+    }
+    
+    
+    
+    /// 多选相册个数,Default : 9
+    ///
+    /// - Parameter count: _
+    open func MultipleCounts(_ count:Int) {
+        UserDefaults.standard.set(count, forKey: cnPhotoCountKey)
+        UserDefaults.standard.synchronize()
+    }
+    
+    open func MultipleDefaultImage(_ defaultImgName:String,_ selectImageName:String){
+        UserDefaults.standard.set(defaultImgName, forKey: cnDefaultImgKey)
+        UserDefaults.standard.set(selectImageName, forKey: cnselectImageKey)
+        UserDefaults.standard.synchronize()
     }
 }
 

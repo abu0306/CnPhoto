@@ -38,4 +38,9 @@ let cnIsDoublePickerKey = "cnIsDoublePickerKey"
 
 let cnPhotoDelegateKey = "cnPhotoDelegateKey"
 
+let cnPhotoCountKey = "cnPhotoCount"
+
+let cnDefaultImgKey = "cnDefaultImgKey"
+
+let cnselectImageKey = "cnselectImageKey"
 

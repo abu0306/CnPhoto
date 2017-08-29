@@ -120,6 +120,18 @@ extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
             }else{
                 doubleStatusCollection.append(indexPath.row)
             }
+            
+            let count =  UserDefaults.standard.integer(forKey: cnPhotoCountKey)
+            
+            if count > 0 && count < doubleStatusCollection.count {
+                let alertVC = UIAlertController(title: nil, message: "你最多只能选择\(count)张照片", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "知道了", style: .cancel, handler: nil)
+                alertVC.addAction(cancelAction)
+                self.cnViewController()?.present(alertVC, animated: true, completion: nil)
+                return
+            }
+
+            
             collectionView.reloadItems(at: [indexPath])
         }else
         {
@@ -186,11 +198,15 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
     
     fileprivate lazy var hookImgView = UIImageView()
     
+    fileprivate lazy var selectImageName = UserDefaults.standard.string(forKey: cnselectImageKey)
+    fileprivate lazy var defaultImgName = UserDefaults.standard.string(forKey: cnDefaultImgKey)
+    
     var doubleStatusCollection : [Int]?
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         
         myImageView.frame = self.bounds
         myImageView.contentMode = .scaleAspectFill
@@ -226,10 +242,19 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         
         if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
             let isContains = doubleStatusCollection?.contains(index.row)
-            if  isContains == true {
-                hookImgView.image = UIImage(named: "cnPhotoSelect")
+            
+            if selectImageName == nil && defaultImgName == nil {
+                if  isContains == true {
+                    hookImgView.image = UIImage(named: "cnPhotoSelect")
+                }else{
+                    hookImgView.image = UIImage(named: "cnPhotoDefault")
+                }
             }else{
-                hookImgView.image = UIImage(named: "cnPhotoDefault")
+                if  isContains == true {
+                    hookImgView.image = UIImage(named: selectImageName ?? "")
+                }else{
+                    hookImgView.image = UIImage(named: defaultImgName ?? "")
+                }
             }
         }
     }
