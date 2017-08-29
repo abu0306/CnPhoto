@@ -1,12 +1,16 @@
+
+ ![](http://upload-images.jianshu.io/upload_images/5874642-f0d20e6e207fb512.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+ ---
 ## CnPhoto
-##CnPhoto 基于系统Photo框架开发,适用于iOS8.0以后版本
 ---
-##Installation
+CnPhoto 基于系统Photo框架开发,适用于iOS8.0以后版本
+---
+Installation
 ---
 CnPhoto supports multiple methods for installing the library in a project.
-###Installation with CocoaPods
+Installation with CocoaPods
 ---
-###Podfile
+Podfile
 1,To integrate CnPhoto into your Xcode project using CocoaPods, specify it in your Podfile:
 
 ```python
@@ -26,7 +30,7 @@ $ pod install
 2,Direct download package, to join the project, don't need any dependent libraries
 
 ---
-##Usage
+Usage
 The default navigation album:
 ```python
 /// 相册默认导航
