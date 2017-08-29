@@ -23,8 +23,10 @@ class CnPhotoList: UIView {
     
     // 是否为多选 ,默认单选
     fileprivate lazy var IsPictureDoublePicker =  {
-        return UserDefaults.standard.bool(forKey: isDoublePickerKey)
+        return UserDefaults.standard.bool(forKey: cnIsDoublePickerKey)
     }()
+    
+    lazy var doubleStatusCollection = [Int]()
     
     /// 图片对象
     var assetCollection : PHAssetCollection?
@@ -39,7 +41,7 @@ class CnPhotoList: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
+        setupUI(frame)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,9 +66,9 @@ class CnPhotoList: UIView {
         mycollectionView.reloadData()
     }
     
-    fileprivate func setupUI(){
+    fileprivate func setupUI(_ frame:CGRect){
         mycollectionView.backgroundColor = UIColor.clear
-        mycollectionView.frame = UIScreen.main.bounds
+        mycollectionView.frame = CGRect(x: 0, y: 0, width: cnScreenW, height: frame.size.height)
         mycollectionView.delegate = self
         mycollectionView.dataSource = self
         mycollectionView.alwaysBounceVertical = true
@@ -91,20 +93,41 @@ extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as? CnPhotoListCell
         cell?.aIndexPath = indexPath
         cell?.fetchResult = fetchResult
+        cell?.doubleStatusCollection = doubleStatusCollection
         cell?.reloadData()
+        cell?.reloadHook()
         return cell!
     }
     
     internal func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let vc  = CnBrowsePicture()
         guard let fr = fetchResult else {
             fatalError("*********没有获取到图像集*********")
         }
         
-        let result = IsPictureDoublePicker ? [PHAsset]() : [fr[indexPath.row]]
-        vc.fetchResult = result
-        self.cnViewController()?.navigationController?.pushViewController(vc, animated: true)
+        if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
+            
+            let isContains = doubleStatusCollection.contains(indexPath.row)
+            
+            if isContains {
+                
+               let valueIndex = doubleStatusCollection.index(where: { (value) -> Bool in
+                    return value == indexPath.row
+                })
+                if let i  = valueIndex {
+                    doubleStatusCollection.remove(at: i)
+                }
+            }else{
+                doubleStatusCollection.append(indexPath.row)
+            }
+            collectionView.reloadItems(at: [indexPath])
+        }else
+        {
+            let vc  = CnBrowsePicture()
+            let result = IsPictureDoublePicker ? [PHAsset]() : [fr[indexPath.row]]
+            vc.fetchResult = result
+            self.cnViewController()?.navigationController?.pushViewController(vc, animated: true)
+        }
         
     }
     
@@ -156,9 +179,15 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
     var aIndexPath : IndexPath?
     var fetchResult : PHFetchResult<PHAsset>?
     
-    var myImage : UIImage?
     
     fileprivate lazy var myImageView = UIImageView()
+    
+    fileprivate lazy var myImage = UIImage()
+    
+    fileprivate lazy var hookImgView = UIImageView()
+    
+    var doubleStatusCollection : [Int]?
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -167,19 +196,41 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         myImageView.contentMode = .scaleAspectFill
         contentView.addSubview(myImageView)
         myImageView.clipsToBounds = true
+        
+        if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
+            hookImgView.frame = CGRect(x: photoListImgW - 23, y: 3, width: 20, height: 20)
+            hookImgView.backgroundColor = UIColor.clear
+            hookImgView.image = UIImage(named: "cnPhotoDefault")
+            contentView.addSubview(hookImgView)
+            hookImgView.autoresizingMask = [.flexibleHeight , .flexibleWidth]
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func reloadData() {
+    fileprivate func reloadData() {
         guard let fetchResult = fetchResult  else { return }
         guard let aIndexPath = aIndexPath  else { return }
         
         CnRequestManager.getListImage(fetchResult[aIndexPath.row]) {[weak self] (img) in
             self?.myImage = img
             self?.myImageView.image = img
+        }
+    }
+    
+    fileprivate func reloadHook(){
+        
+        guard let index = aIndexPath else { return }
+        
+        if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
+            let isContains = doubleStatusCollection?.contains(index.row)
+            if  isContains == true {
+                hookImgView.image = UIImage(named: "cnPhotoSelect")
+            }else{
+                hookImgView.image = UIImage(named: "cnPhotoDefault")
+            }
         }
     }
 }

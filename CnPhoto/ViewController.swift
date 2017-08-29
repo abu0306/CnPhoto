@@ -26,19 +26,18 @@ class ViewController: UIViewController {
         myImageView.backgroundColor = UIColor.green
         view.addSubview(myImageView)
         myImageView.contentMode = .scaleAspectFill
+        myImageView.clipsToBounds = true
     }
     
+//    /// UIImage异步回调
+//    ///
+//    /// - Parameter img: _
+//    func completeSinglePicture(_ img: UIImage) {
+//        myImageView.image = img
+//    }
     
     
-    /// UIImage回调
-    ///
-    /// - Parameter img: _
-    func completeSinglePicture(_ img: UIImage) {
-        myImageView.image = img
-    }
-    
-    
-    /// UIImage线程阻塞回调
+    /// UIImage同步回调
     ///
     /// - Parameters:
     ///   - img: _
@@ -49,16 +48,41 @@ class ViewController: UIViewController {
     }
     
     
+    /// [UIImage]多选相册自定义导航异步回调
+    ///
+    /// - Parameter imgArray: _
+//    func completeDoublePicture(_ imgArray: [UIImage]) {
+//        myImageView.image = imgArray[0]
+//        print(imgArray)
+//    }
+    
+    /// [UIImage]多选相册自定义导航同步回调
+    ///
+    func completeSynchronousDoublePicture(_ imgArray: [UIImage], _ completeHandle: () -> ()) {
+        
+        myImageView.image = imgArray[0]
+        print(imgArray)
+        completeHandle()
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func btnAction() {
         
-        /// 相册默认导航
+        /// 单选相册默认导航
         //self.photoAlbum(false)
-        //相册自定义导航
+        
+        //单选相册自定义导航
         self.photoAlbum(false, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
+        
+        /// 单选相册默认导航
+        //self.photoAlbum(true)
+        
+        //多选相册自定义导航
+//        self.photoAlbum(true, .lightContent, UIColor.black, tintColor: UIColor.white, bgColor: UIColor.white)
     }
 
 }

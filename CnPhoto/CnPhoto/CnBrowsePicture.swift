@@ -19,7 +19,6 @@ private let cellID = "CnBrowsePicturesCell"
 
 class CnBrowsePicture: UIViewController {
     
-    
     var aindexPath : IndexPath?
     
     /// 图片对象集
@@ -28,6 +27,9 @@ class CnBrowsePicture: UIViewController {
             mycollectionView.reloadData()
         }
     }
+    
+    var doubleStatusCollection : [Int]?
+    
     
     lazy var navigationView: UIView = {
         let v = UIView(frame: CGRect(
@@ -46,14 +48,17 @@ class CnBrowsePicture: UIViewController {
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
-        let cv = UICollectionView(frame: CGRect.init(x: 0, y: 0, width: cnScreenW + 10, height: cnScreenH), collectionViewLayout: layout)
+        let cv = UICollectionView(frame: CGRect.init(x: 0,
+                                                     y: 0,
+                                                     width: cnScreenW + 10,
+                                                     height: cnScreenH), collectionViewLayout: layout)
         cv.isPagingEnabled = true
         return cv
     }()
     
     // 是否为多选 ,默认单选
     fileprivate lazy var isPictureDoublePicker =  {
-        return UserDefaults.standard.bool(forKey: isDoublePickerKey)
+        return UserDefaults.standard.bool(forKey: cnIsDoublePickerKey)
     }()
     
     override func viewDidLoad() {
@@ -67,19 +72,18 @@ class CnBrowsePicture: UIViewController {
         
         if isPictureDoublePicker {
             //多选未设置
-            print("多选未设置")
+            singlePickerImgViewUI()
         }else{
             singlePickerImgViewUI()
+            
+            let topV = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0, width: cnScreenW, height: 1))
+            topV.backgroundColor = UIColor.white
+            view.addSubview(topV)
+            
+            let bottomV = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0 + cnScreenW, width: cnScreenW, height: 1))
+            bottomV.backgroundColor = UIColor.white
+            view.addSubview(bottomV)
         }
-        
-        let topV = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0, width: cnScreenW, height: 1))
-        topV.backgroundColor = UIColor.white
-        view.addSubview(topV)
-        
-        let bottomV = UIView(frame: CGRect(x: 0, y: (cnScreenH - cnScreenW) / 2.0 + cnScreenW, width: cnScreenW, height: 1))
-        bottomV.backgroundColor = UIColor.white
-        view.addSubview(bottomV)
-        
     }
     
     @objc fileprivate func backBtnAction() {
@@ -189,8 +193,51 @@ extension CnBrowsePicture{
             break
         case determineBtnTAG:
             //确定
-            
             let delegate = (navigationController?.viewControllers.first as? CnPhotoCollection)?.delegate
+            
+            if isPictureDoublePicker {
+                /***********************多选******************************/
+                var localResult = [PHAsset]()
+                guard let doubleStatusCollection = doubleStatusCollection else {  return  }
+                for (inex,_) in doubleStatusCollection.enumerated() {
+                    guard let fr = fetchResult?[inex]  else {break}
+                    localResult.append(fr)
+                }
+                
+                var imgArray = [UIImage]()
+                
+                if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSynchronousDoublePicture(_:_:)))) ?? false {
+                    
+                    for assetValue in localResult {
+                        CnRequestManager.getBigPictures(assetValue, completeHandler: { (img) in
+                            imgArray.append(img)
+                            if  localResult.count == imgArray.count {
+                                delegate?.completeSynchronousDoublePicture!(imgArray, {
+                                    self.dismiss(animated: true, completion: nil)
+                                })
+                            }
+                        })
+                    }
+                    return
+                }else{
+                    if (delegate?.responds(to: #selector(CnPhotoProtocol.completeDoublePicture(_:)))) ?? false {
+                        for assetValue in localResult {
+                            CnRequestManager.getBigPictures(assetValue, completeHandler: { (img) in
+                                imgArray.append(img)
+                                if  localResult.count == imgArray.count {
+                                    delegate?.completeDoublePicture!(imgArray)
+                                    self.dismiss(animated: true, completion: nil)
+                                }
+                            })
+                        }
+                        return
+                    }else{
+                        fatalError("没有实现_CnPhotoProtocol协议")
+                    }
+                }
+                return
+            }
+            /***********************单选******************************/
             
             if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSinglePicture(_:_:)))) ?? false {
                 
@@ -210,7 +257,7 @@ extension CnBrowsePicture{
                 return
                 
             }else{
-
+                
                 if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSinglePicture(_:)))) ?? false {
                     
                     guard let scrollView = (self.mycollectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? CnBrowsePicturesCell)?.myscrollView else { return }
@@ -250,24 +297,34 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
         didSet{
             guard let strongBrowseImage = browseImage else { return }
             
-            //／ 原始高值
-            let imgH = cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width
-            /// 差值
-            let diffValue = imgH - cnScreenW
-            if diffValue > 0{
-                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + diffValue)
-                self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
-                
-                imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 + diffValue / 2.0)
-                
-                imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
+            let isDoublePickerKey = UserDefaults.standard.bool(forKey: cnIsDoublePickerKey)
+            
+            if !isDoublePickerKey{
+                //／ 原始高值
+                let imgH = cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width
+                /// 差值
+                let diffValue = imgH - cnScreenW
+                if diffValue > 0{
+                    self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + diffValue)
+                    self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
+                    
+                    imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 + diffValue / 2.0)
+                    
+                    imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
+                }else{
+                    
+                    self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH)
+                    self.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+                    
+                    imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 )
+                    
+                    imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
+                }
             }else{
-                
+                //多选
+                let imgH = cnScreenW * strongBrowseImage.size.height / strongBrowseImage.size.width
                 self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH)
-                self.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-                
                 imageV.center = CGPoint(x: self.center.x, y: cnScreenH / 2.0 )
-                
                 imageV.bounds = CGRect(x: 0, y: 0, width: cnScreenW, height: imgH)
                 
             }
@@ -353,28 +410,26 @@ class CnBrowseScrollView : UIScrollView,UIScrollViewDelegate,CnPrivateProtocol {
         
         let differenceValue = imageV.frame.size.height - cnScreenW
         let imgH = imageV.frame.size.height
-        if differenceValue > 0{
-            if imgH > cnScreenH {
-                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
-                
-                self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
-                imageV.center = CGPoint(x: imageV.center.x, y:cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
-                
-            }else{
-                self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
-                self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
-                imageV.center = CGPoint(x: imageV.center.x, y: cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
+        
+        let isDoublePickerKey = UserDefaults.standard.bool(forKey: cnIsDoublePickerKey)
+        
+        if !isDoublePickerKey{
+            
+            if differenceValue > 0{
+                if imgH > cnScreenH {
+                    self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
+                    
+                    self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
+                    imageV.center = CGPoint(x: imageV.center.x, y:cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
+                    
+                }else{
+                    self.contentSize = CGSize(width: self.contentSize.width, height: cnScreenH + (imgH  - cnScreenW ))
+                    self.setContentOffset(CGPoint(x: self.contentOffset.x, y: (imgH  - cnScreenW ) / 2.0), animated: false)
+                    imageV.center = CGPoint(x: imageV.center.x, y: cnScreenH / 2.0 + (imgH  - cnScreenW ) / 2.0)
+                }
             }
+            
         }
-        else{
-            //            print(imageV.frame.size)
-        }
-    }
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-    }
-    
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         
     }
     

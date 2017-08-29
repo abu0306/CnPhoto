@@ -8,11 +8,12 @@
 
 import UIKit
 import Photos
+private let bottomViewHeight : CGFloat = 44
+
 enum authorNum:Int {
     case first
     case denied
 }
-
 
 class myNavigationController: UINavigationController {
     
@@ -20,7 +21,6 @@ class myNavigationController: UINavigationController {
         return UIStatusBarStyle.lightContent
     }
 }
-
 
 class CnPhotoCollection: UIViewController {
     
@@ -31,21 +31,26 @@ class CnPhotoCollection: UIViewController {
     /// 是否是单选 Default : true
     var isDoublePicker = true{
         didSet{
-            UserDefaults.standard.set(isDoublePicker, forKey: isDoublePickerKey)
+            UserDefaults.standard.set(isDoublePicker, forKey: cnIsDoublePickerKey)
             UserDefaults.standard.synchronize()
         }
     }
+    
+    
+    fileprivate var mylistView : CnPhotoList?
+    fileprivate var fetchResult : PHFetchResult<PHAsset>?
     
     weak var delegate : CnPhotoProtocol?
     
     lazy var navBarView = UIView()
     
+    lazy var bottomBgView = UIView(frame: CGRect.zero)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupUI()
         getPhotoAlbumPermissions()
-        
+        setupUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,6 +71,7 @@ class CnPhotoCollection: UIViewController {
     
     fileprivate func setupUI(){
         view.backgroundColor = bgColor
+        automaticallyAdjustsScrollViewInsets = false
         title = "相册"
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : tintColor ?? UIColor.black]
         
@@ -80,7 +86,109 @@ class CnPhotoCollection: UIViewController {
         navBarView.alpha = 0.7
         navBarView.backgroundColor = navBgColor
         view.addSubview(navBarView)
+        
     }
+    
+    fileprivate  func dobulePickerImgViewUI() {
+        
+        bottomBgView.backgroundColor = UIColor.clear
+        bottomBgView.frame = CGRect(x: 0, y: view.bounds.size.height - bottomViewHeight, width: cnScreenW, height: bottomViewHeight)
+        view.addSubview(bottomBgView)
+        
+        let maskBgView = UIView(frame: CGRect.zero)
+        maskBgView.backgroundColor = UIColor.black
+        maskBgView.alpha = 0.6
+        maskBgView.frame = CGRect(x: 0, y: 0, width: cnScreenW, height: bottomViewHeight)
+        bottomBgView.addSubview(maskBgView)
+        
+        let cancleBtn = UIButton(type: .custom)
+        cancleBtn.frame = CGRect(x: 15, y: 8, width: 60, height: bottomViewHeight - 16)
+        cancleBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        cancleBtn.setTitle("预览", for: .normal)
+        cancleBtn.setTitleColor(UIColor(red: 255.0/255.0, green: 255.0/255.0, blue: 255.0/255.0, alpha: 0.7), for: .normal)
+        cancleBtn.addTarget(self, action: #selector(singlePickerAction(_:)), for: .touchUpInside)
+        bottomBgView.addSubview(cancleBtn)
+        
+        cancleBtn.tag = cancleBtnTAG
+        
+        let determineBtn = UIButton(type: .custom)
+        determineBtn.frame = CGRect(x: cnScreenW - 75, y: 8, width: 60, height: bottomViewHeight - 16)
+        
+        determineBtn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        determineBtn.setTitle("完成", for: .normal)
+        determineBtn.backgroundColor = UIColor(red: 81.0/255.0, green: 169.0/255.0, blue: 56.0/255.0, alpha: 1)
+            
+        determineBtn.setTitleColor(UIColor.white, for: .normal)
+        determineBtn.addTarget(self, action: #selector(singlePickerAction(_:)), for: .touchUpInside)
+        determineBtn.layer.cornerRadius = 3.0
+        determineBtn.layer.masksToBounds = true
+        bottomBgView.addSubview(determineBtn)
+        determineBtn.tag = determineBtnTAG
+        
+    }
+
+    @objc fileprivate func singlePickerAction(_ sender : UIButton) {
+        switch sender.tag {
+        case cancleBtnTAG:
+            //预览
+            var localResult = [PHAsset]()
+            guard let doubleStatusCollection = mylistView?.doubleStatusCollection else {  return  }
+            for value in doubleStatusCollection {
+                guard let fr = fetchResult?[value]  else {break}
+                localResult.append(fr)
+            }
+            let vc  = CnBrowsePicture()
+            vc.fetchResult = localResult
+            vc.doubleStatusCollection = doubleStatusCollection
+            self.navigationController?.pushViewController(vc, animated: true)
+            break
+        default:
+            //完成
+            
+            let delegate = (navigationController?.viewControllers.first as? CnPhotoCollection)?.delegate
+            
+            var localResult = [PHAsset]()
+            guard let doubleStatusCollection = mylistView?.doubleStatusCollection else {  return  }
+            for value in doubleStatusCollection {
+                guard let fr = fetchResult?[value]  else {break}
+                localResult.append(fr)
+            }
+
+            var imgArray = [UIImage]()
+            
+            if (delegate?.responds(to: #selector(CnPhotoProtocol.completeSynchronousDoublePicture(_:_:)))) ?? false {
+                
+                for assetValue in localResult {
+                    CnRequestManager.getBigPictures(assetValue, completeHandler: { (img) in
+                        imgArray.append(img)
+                        if  localResult.count == imgArray.count {
+                            delegate?.completeSynchronousDoublePicture!(imgArray, {
+                                self.dismiss(animated: true, completion: nil)
+                            })
+                        }
+                    })
+                }
+                return
+            }else{
+                if (delegate?.responds(to: #selector(CnPhotoProtocol.completeDoublePicture(_:)))) ?? false {
+                    for assetValue in localResult {
+                        CnRequestManager.getBigPictures(assetValue, completeHandler: { (img) in
+                            imgArray.append(img)
+                            if  localResult.count == imgArray.count {
+                                delegate?.completeDoublePicture!(imgArray)
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                        })
+                    }
+                    return
+                }else{
+                    fatalError("没有实现_CnPhotoProtocol协议")
+                }
+            }
+            break
+        }
+    }
+
 }
 
 extension CnPhotoCollection{
@@ -97,8 +205,8 @@ extension CnPhotoCollection{
             return
         }
         else{
-            let assetCollection  = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumUserLibrary, options: nil).lastObject
-            if assetCollection == nil
+            let assetC  = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.smartAlbum, subtype: PHAssetCollectionSubtype.smartAlbumUserLibrary, options: nil).lastObject
+            if assetC == nil
             {
                 let v = CnUserDisable(frame: CGRect(x: 0, y: 64, width: cnScreenW, height: cnScreenH - 64))
                 view.addSubview(v)
@@ -106,9 +214,21 @@ extension CnPhotoCollection{
                 return
             }
             
-            let v = CnPhotoList(frame: CGRect(x: 0, y: 64, width: cnScreenW, height: cnScreenH - 64))
-            v.assetCollection = assetCollection
+            let listH : CGFloat = isDoublePicker ? (64 + bottomViewHeight) : 64
+            let v = CnPhotoList(frame: CGRect(x: 0, y: 64, width: cnScreenW, height: cnScreenH - listH))
+            v.assetCollection = assetC
             view.addSubview(v)
+            mylistView = v
+            
+            func getFetchResult(_ asset:PHAssetCollection?) {
+                guard let asset = asset else { return }
+                fetchResult = PHAsset.fetchAssets(in: asset, options: nil)
+            }
+
+            if isDoublePicker {
+                getFetchResult(assetC)
+                dobulePickerImgViewUI()
+            }
         }
     }
 }
@@ -147,4 +267,5 @@ class CnUserDisable: UIView {
         MSgAlert.sizeToFit()
         MSgAlert.frame = CGRect(x: 0, y: 100, width: UIScreen.main.bounds.width, height: MSgAlert.bounds.height)
     }
+    
 }

@@ -33,13 +33,14 @@ extension UIViewController:CnPhotoProtocol{
     }
     
     
-    private func privatePhotoAlbum(_ isDouble : Bool? = false,_ statusBarStyle : UIStatusBarStyle? = .default,_ navBgColor : UIColor? = UIColor.white , tintColor : UIColor? = UIColor.black,bgColor:UIColor? = UIColor.black) {
+    private func privatePhotoAlbum(_ isDouble : Bool? = true,_ statusBarStyle : UIStatusBarStyle? = .default,_ navBgColor : UIColor? = UIColor.white , tintColor : UIColor? = UIColor.black,bgColor:UIColor? = UIColor.black) {
         
         let vc = CnPhotoCollection()
         vc.delegate = self
         vc.bgColor = bgColor
         vc.navBgColor = navBgColor
         vc.tintColor = tintColor
+        vc.isDoublePicker = isDouble ?? false
         if statusBarStyle == UIStatusBarStyle.default{
             let nav = UINavigationController(rootViewController: vc)
             present(nav, animated: true, completion: nil)

@@ -34,7 +34,7 @@ let cancleBtnTAG = -1000001
 /// 确定btn()
 let determineBtnTAG = -1000002
 
-let isDoublePickerKey = "isDoublePickerKey"
+let cnIsDoublePickerKey = "cnIsDoublePickerKey"
 
 let cnPhotoDelegateKey = "cnPhotoDelegateKey"
 
