@@ -118,18 +118,21 @@ extension CnPhotoList:UICollectionViewDelegate,UICollectionViewDataSource{
                     doubleStatusCollection.remove(at: i)
                 }
             }else{
+                
+                let count =  UserDefaults.standard.integer(forKey: cnPhotoCountKey)
+                
+                if count > 0 && count == doubleStatusCollection.count {
+                    let alertVC = UIAlertController(title: nil, message: "你最多只能选择\(count)张照片", preferredStyle: .alert)
+                    let cancelAction = UIAlertAction(title: "知道了", style: .cancel, handler: nil)
+                    alertVC.addAction(cancelAction)
+                    self.cnViewController()?.present(alertVC, animated: true, completion: nil)
+                    return
+                }
+                
                 doubleStatusCollection.append(indexPath.row)
             }
             
-            let count =  UserDefaults.standard.integer(forKey: cnPhotoCountKey)
-            
-            if count > 0 && count < doubleStatusCollection.count {
-                let alertVC = UIAlertController(title: nil, message: "你最多只能选择\(count)张照片", preferredStyle: .alert)
-                let cancelAction = UIAlertAction(title: "知道了", style: .cancel, handler: nil)
-                alertVC.addAction(cancelAction)
-                self.cnViewController()?.present(alertVC, animated: true, completion: nil)
-                return
-            }
+
 
             
             collectionView.reloadItems(at: [indexPath])
@@ -185,6 +188,8 @@ extension CnPhotoList{
     }
 }
 
+private let bundlePath = Bundle.main.path(forResource: "CnPhoto", ofType: "bundle")
+
 // MARK: - NewClass
 fileprivate class CnPhotoListCell: UICollectionViewCell {
     
@@ -216,7 +221,7 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
             hookImgView.frame = CGRect(x: photoListImgW - 23, y: 3, width: 20, height: 20)
             hookImgView.backgroundColor = UIColor.clear
-            hookImgView.image = UIImage(named: "cnPhotoDefault")
+            hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoDefault") ?? "")
             contentView.addSubview(hookImgView)
             hookImgView.autoresizingMask = [.flexibleHeight , .flexibleWidth]
         }
@@ -240,14 +245,15 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         
         guard let index = aIndexPath else { return }
         
+        
         if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
             let isContains = doubleStatusCollection?.contains(index.row)
             
             if selectImageName == nil && defaultImgName == nil {
                 if  isContains == true {
-                    hookImgView.image = UIImage(named: "cnPhotoSelect")
+                    hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoSelect") ?? "")
                 }else{
-                    hookImgView.image = UIImage(named: "cnPhotoDefault")
+                    hookImgView.image =  UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoDefault") ?? "")
                 }
             }else{
                 if  isContains == true {

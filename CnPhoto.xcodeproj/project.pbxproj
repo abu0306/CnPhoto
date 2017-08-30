@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E82596771F5649D6000E2695 /* CnPhoto.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E82596761F5649D6000E2695 /* CnPhoto.bundle */; };
 		E865523A1F38427F00F9554B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552391F38427F00F9554B /* AppDelegate.swift */; };
 		E865523C1F38427F00F9554B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865523B1F38427F00F9554B /* ViewController.swift */; };
 		E865523F1F38427F00F9554B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E865523D1F38427F00F9554B /* Main.storyboard */; };
@@ -22,10 +23,6 @@
 		E8799AE81F52C6C40042DA31 /* CnPhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799AE01F52C6C40042DA31 /* CnPhotoList.swift */; };
 		E8799AE91F52C6C40042DA31 /* CnPhotoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */; };
 		E8799AEA1F52C6C40042DA31 /* CnRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */; };
-		E8838FCA1F552BFA000BE4E3 /* cnPhotoDefault@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E8838FC61F552BFA000BE4E3 /* cnPhotoDefault@2x.png */; };
-		E8838FCB1F552BFA000BE4E3 /* cnPhotoDefault@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E8838FC71F552BFA000BE4E3 /* cnPhotoDefault@3x.png */; };
-		E8838FCC1F552BFA000BE4E3 /* cnPhotoSelect@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E8838FC81F552BFA000BE4E3 /* cnPhotoSelect@2x.png */; };
-		E8838FCD1F552BFA000BE4E3 /* cnPhotoSelect@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E8838FC91F552BFA000BE4E3 /* cnPhotoSelect@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E82596761F5649D6000E2695 /* CnPhoto.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CnPhoto.bundle; sourceTree = "<group>"; };
 		E86552361F38427F00F9554B /* CnPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CnPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86552391F38427F00F9554B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E865523B1F38427F00F9554B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -67,10 +65,6 @@
 		E8799AE01F52C6C40042DA31 /* CnPhotoList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoList.swift; sourceTree = "<group>"; };
 		E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoProtocol.swift; sourceTree = "<group>"; };
 		E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnRequestManager.swift; sourceTree = "<group>"; };
-		E8838FC61F552BFA000BE4E3 /* cnPhotoDefault@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cnPhotoDefault@2x.png"; sourceTree = "<group>"; };
-		E8838FC71F552BFA000BE4E3 /* cnPhotoDefault@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cnPhotoDefault@3x.png"; sourceTree = "<group>"; };
-		E8838FC81F552BFA000BE4E3 /* cnPhotoSelect@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cnPhotoSelect@2x.png"; sourceTree = "<group>"; };
-		E8838FC91F552BFA000BE4E3 /* cnPhotoSelect@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cnPhotoSelect@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +147,7 @@
 		E8799ADA1F52C6C40042DA31 /* CnPhoto */ = {
 			isa = PBXGroup;
 			children = (
+				E82596761F5649D6000E2695 /* CnPhoto.bundle */,
 				E8799ADE1F52C6C40042DA31 /* CnPhoto.swift */,
 				E8799ADF1F52C6C40042DA31 /* CnPhotoCollection.swift */,
 				E8799ADB1F52C6C40042DA31 /* CnBrowsePicture.swift */,
@@ -161,20 +156,8 @@
 				E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */,
 				E8799ADD1F52C6C40042DA31 /* CnExtension.swift */,
 				E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */,
-				E8838FC51F552BFA000BE4E3 /* Resources */,
 			);
 			path = CnPhoto;
-			sourceTree = "<group>";
-		};
-		E8838FC51F552BFA000BE4E3 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				E8838FC61F552BFA000BE4E3 /* cnPhotoDefault@2x.png */,
-				E8838FC71F552BFA000BE4E3 /* cnPhotoDefault@3x.png */,
-				E8838FC81F552BFA000BE4E3 /* cnPhotoSelect@2x.png */,
-				E8838FC91F552BFA000BE4E3 /* cnPhotoSelect@3x.png */,
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,11 +269,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E86552441F38427F00F9554B /* LaunchScreen.storyboard in Resources */,
+				E82596771F5649D6000E2695 /* CnPhoto.bundle in Resources */,
 				E86552411F38427F00F9554B /* Assets.xcassets in Resources */,
-				E8838FCB1F552BFA000BE4E3 /* cnPhotoDefault@3x.png in Resources */,
-				E8838FCA1F552BFA000BE4E3 /* cnPhotoDefault@2x.png in Resources */,
-				E8838FCD1F552BFA000BE4E3 /* cnPhotoSelect@3x.png in Resources */,
-				E8838FCC1F552BFA000BE4E3 /* cnPhotoSelect@2x.png in Resources */,
 				E865523F1F38427F00F9554B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
