@@ -216,11 +216,11 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         let url_l = bundle_l.url(forResource: "CnPhoto", withExtension: "bundle")
         let imageBundle_l = Bundle(url: url_l!)
         
-        print(imageBundle_l)
+        print(imageBundle_l ?? "")
         
      let  s  = imageBundle_l?.path(forResource: "cnPhotoSelect", ofType: "png")
         
-        print("=======================================\(s)")
+        print("=======================================\(String(describing: s))")
         
 //        NSString *path = [imageBundle pathForResource:@"angle-mask" ofType:@"png"];
         
