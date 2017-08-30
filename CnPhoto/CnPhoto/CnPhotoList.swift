@@ -214,6 +214,7 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
 
         print(CnPhotoBundle.CnPhotoImageWithName("cnPhotoDefault"))
         
+        
         myImageView.frame = self.bounds
         myImageView.contentMode = .scaleAspectFill
         contentView.addSubview(myImageView)
