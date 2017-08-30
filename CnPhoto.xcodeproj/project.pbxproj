@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E82596771F5649D6000E2695 /* CnPhoto.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E82596761F5649D6000E2695 /* CnPhoto.bundle */; };
+		E82596831F5661AE000E2695 /* CnPhotoBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82596821F5661AE000E2695 /* CnPhotoBundle.swift */; };
 		E865523A1F38427F00F9554B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E86552391F38427F00F9554B /* AppDelegate.swift */; };
 		E865523C1F38427F00F9554B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E865523B1F38427F00F9554B /* ViewController.swift */; };
 		E865523F1F38427F00F9554B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E865523D1F38427F00F9554B /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		E82596761F5649D6000E2695 /* CnPhoto.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CnPhoto.bundle; sourceTree = "<group>"; };
+		E82596821F5661AE000E2695 /* CnPhotoBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CnPhotoBundle.swift; sourceTree = "<group>"; };
 		E86552361F38427F00F9554B /* CnPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CnPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E86552391F38427F00F9554B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E865523B1F38427F00F9554B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				E8799AE21F52C6C40042DA31 /* CnRequestManager.swift */,
 				E8799ADD1F52C6C40042DA31 /* CnExtension.swift */,
 				E8799AE11F52C6C40042DA31 /* CnPhotoProtocol.swift */,
+				E82596821F5661AE000E2695 /* CnPhotoBundle.swift */,
 			);
 			path = CnPhoto;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				E8799AEA1F52C6C40042DA31 /* CnRequestManager.swift in Sources */,
 				E8799AE81F52C6C40042DA31 /* CnPhotoList.swift in Sources */,
 				E8799AE71F52C6C40042DA31 /* CnPhotoCollection.swift in Sources */,
+				E82596831F5661AE000E2695 /* CnPhotoBundle.swift in Sources */,
 				E8799AE31F52C6C40042DA31 /* CnBrowsePicture.swift in Sources */,
 				E8799AE41F52C6C40042DA31 /* CnCommon.swift in Sources */,
 				E8799AE61F52C6C40042DA31 /* CnPhoto.swift in Sources */,

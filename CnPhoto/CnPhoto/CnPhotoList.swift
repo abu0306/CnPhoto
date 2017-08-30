@@ -211,18 +211,8 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        let bundle_l = Bundle(for: CnPhotoList.classForCoder())
-        let url_l = bundle_l.url(forResource: "CnPhoto", withExtension: "bundle")
-        let imageBundle_l = Bundle(url: url_l!)
-        
-        print(imageBundle_l ?? "")
-        
-     let  s  = imageBundle_l?.path(forResource: "cnPhotoSelect", ofType: "png")
-        
-        print("=======================================\(String(describing: s))")
-        
-//        NSString *path = [imageBundle pathForResource:@"angle-mask" ofType:@"png"];
+
+        print(CnPhotoBundle.CnPhotoImageWithName("cnPhotoDefault"))
         
         myImageView.frame = self.bounds
         myImageView.contentMode = .scaleAspectFill
