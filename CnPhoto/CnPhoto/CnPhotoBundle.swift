@@ -18,7 +18,7 @@ class CnPhotoBundle: NSObject {
         let v = UIImage(named: "CnPhoto.bundle/cnPhotoDefault")
 //            CnPhotoBundle.CnPhotoPathForResource("ShanLinSDK.bundle/Face_back", "png")
         
-        print(v)
+        print(v ?? UIImage())
         
         guard let imagePath = CnPhotoBundle.CnPhotoPathForResource(name, "png") else {return UIImage()}
         return UIImage(contentsOfFile: imagePath)!
