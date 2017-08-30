@@ -14,16 +14,12 @@ private let CnPhotoBundleType = "bundle"
 
 class CnPhotoBundle: NSObject {
     class func CnPhotoImageWithName(_ name:String) -> UIImage {
-        
-        let v = UIImage(named: "CnPhoto.bundle/cnPhotoDefault")
-//            CnPhotoBundle.CnPhotoPathForResource("ShanLinSDK.bundle/Face_back", "png")
-        
-        print(v ?? UIImage())
-        
-        guard let imagePath = CnPhotoBundle.CnPhotoPathForResource(name, "png") else {return UIImage()}
-        return UIImage(contentsOfFile: imagePath)!
-    }
-    private class func CnPhotoPathForResource(_ name : String, _ type : String) -> String?{
-        return Bundle.main.path(forResource: name, ofType: type, inDirectory: "ShanLinSDK.bundle")
+        if let imgView = UIImage(named: "Frameworks/CnPhoto.framework/CnPhoto.bundle/\(name)"){
+            return imgView
+        }
+        if let imgView = UIImage(named: "CnPhoto.bundle/\(name)") {
+            return imgView
+        }
+        return UIImage()
     }
 }

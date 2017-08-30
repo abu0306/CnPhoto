@@ -11,6 +11,11 @@
 import UIKit
 import Photos
 
+class CnPhoto: NSObject {
+    
+    
+}
+
 extension UIViewController:CnPhotoProtocol{
     
     /// 相册默认导航
