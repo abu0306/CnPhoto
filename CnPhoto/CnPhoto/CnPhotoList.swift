@@ -223,7 +223,7 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
             hookImgView.frame = CGRect(x: photoListImgW - 23, y: 3, width: 20, height: 20)
             hookImgView.backgroundColor = UIColor.clear
-            hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/≈") ?? "")
+//            hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/") ?? "")
             contentView.addSubview(hookImgView)
             hookImgView.autoresizingMask = [.flexibleHeight , .flexibleWidth]
         }
@@ -253,9 +253,9 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
             
             if selectImageName == nil && defaultImgName == nil {
                 if  isContains == true {
-                    hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoSelect") ?? "")
+//                    hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoSelect") ?? "")
                 }else{
-                    hookImgView.image =  UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoDefault") ?? "")
+//                    hookImgView.image =  UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoDefault") ?? "")
                 }
             }else{
                 if  isContains == true {
