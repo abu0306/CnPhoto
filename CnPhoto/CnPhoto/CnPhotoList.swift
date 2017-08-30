@@ -212,6 +212,17 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        let bundle_l = Bundle(for: CnPhotoList.classForCoder())
+        let url_l = bundle_l.url(forResource: "CnPhoto", withExtension: "bundle")
+        let imageBundle_l = Bundle(url: url_l!)
+        
+        print(imageBundle_l)
+        
+     let  s  = imageBundle_l?.path(forResource: "cnPhotoSelect", ofType: "png")
+        
+        print("=======================================\(s)")
+        
+//        NSString *path = [imageBundle pathForResource:@"angle-mask" ofType:@"png"];
         
         myImageView.frame = self.bounds
         myImageView.contentMode = .scaleAspectFill
@@ -221,7 +232,7 @@ fileprivate class CnPhotoListCell: UICollectionViewCell {
         if UserDefaults.standard.bool(forKey: cnIsDoublePickerKey) {
             hookImgView.frame = CGRect(x: photoListImgW - 23, y: 3, width: 20, height: 20)
             hookImgView.backgroundColor = UIColor.clear
-            hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/cnPhotoDefault") ?? "")
+            hookImgView.image = UIImage(contentsOfFile: bundlePath?.appending("/≈") ?? "")
             contentView.addSubview(hookImgView)
             hookImgView.autoresizingMask = [.flexibleHeight , .flexibleWidth]
         }
