@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc protocol CnPhotoProtocol:NSObjectProtocol{
+@objc public protocol CnPhotoProtocol:NSObjectProtocol{
     
     
     /// 单选照片同步回调协议
