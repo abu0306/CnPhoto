@@ -2,8 +2,8 @@
 //  CnPhoto.swift
 //  Appollo
 //
-//  Created by MyLifeIsNotLost on 2017/8/27.
-//  Copyright © 2017年 shanlin. All rights reserved.
+//  Created by abu on 2017/8/27.
+//  Copyright © 2017年 abu. All rights reserved.
 //
 
 /**************************相册调用入口*******************************/
