@@ -496,7 +496,7 @@ class CnBrowseImageView: UIImageView,UIGestureRecognizerDelegate {
     }
     
     
-    func singleTapGestureRecongizer(_ recognizer:UITapGestureRecognizer) {
+    @objc func singleTapGestureRecongizer(_ recognizer:UITapGestureRecognizer) {
         
         if recognizer.state == .ended {
             switch recognizer.numberOfTapsRequired {

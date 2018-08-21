@@ -10,7 +10,6 @@ import UIKit
 
 @objc public protocol CnPhotoProtocol:NSObjectProtocol{
     
-    
     /// 单选照片同步回调协议
     ///
     /// - Parameters:

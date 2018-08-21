@@ -78,7 +78,7 @@ class CnPhotoCollection: UIViewController {
         view.backgroundColor = bgColor
         automaticallyAdjustsScrollViewInsets = false
         title = "相册"
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : tintColor ?? UIColor.black]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : tintColor ?? UIColor.black]
         
         let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 44))
         btn.setTitle("取消", for: .normal)

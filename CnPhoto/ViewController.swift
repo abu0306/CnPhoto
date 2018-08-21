@@ -85,7 +85,7 @@ class ViewController: UIViewController {
     }
     
     /// 单选事件
-    func singleBtnAction1() {
+    @objc func singleBtnAction1() {
         
         /// 单选相册默认导航
         //self.photoAlbum(false)
@@ -95,7 +95,7 @@ class ViewController: UIViewController {
     }
     
     /// 多选事件
-    func doubleBtnAction2()  {
+    @objc func doubleBtnAction2()  {
         /// 多选相册默认导航
         //self.photoAlbum(true)
         
