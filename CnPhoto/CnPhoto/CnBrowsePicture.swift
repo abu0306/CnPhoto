@@ -2,8 +2,8 @@
 //  CnBrowsePicture.swift
 //  CnPhoto
 //
-//  Created by MyLifeIsNotLost on 2017/8/23.
-//  Copyright © 2017年 MyLifeIsNotLost. All rights reserved.
+//  Created by abu on 2017/8/23.
+//  Copyright © 2017年 abu. All rights reserved.
 //
 
 import UIKit
